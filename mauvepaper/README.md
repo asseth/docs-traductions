@@ -1,0 +1,1 @@
+Traduction du [Mauve Paper](http://vitalik.ca/files/mauve_paper.html?v=3) de Vitalik Buterin, originellement parue sur [Ethereum France](https://www.ethereum-france.com/%EF%BB%BFethereum-2-0-mauve-paper-traduction-francaise/).
