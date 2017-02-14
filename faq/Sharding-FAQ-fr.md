@@ -3,7 +3,7 @@
 ### Introduction
 
 Actuellement, tous les protocoles des blockchains dépendent d'un
-modèle où tous les nœuds stockent outes les états (soldes de comptes,
+modèle où tous les nœuds stockent tous les états (soldes de comptes,
 code et stockage de contrat, etc.) et traitent toutes les
 transactions. Cela fournit une sécurité importante mais limite
 énormément le passage à l'échelle, ou _scaling_, des blockchains&nbsp;: une
@@ -1052,7 +1052,7 @@ prometteuse.
 
 Si.
 
-### Donc nous n'avons pas vraiment résolu le trilemne, mais nous l'avons esquivé en lâchant un peu de lest au niveau du modèle de sécurité&nbsp;?
+### Donc nous n'avons pas vraiment résolu le trilemme, mais nous l'avons esquivé en lâchant un peu de lest au niveau du modèle de sécurité&nbsp;?
 
 En quelque sorte. Notons que les attaquants peuvent réduire la «
 qualité de chaîne&nbsp;» d'un fragment, mais ils peuvent toujours pas
@@ -1454,5 +1454,5 @@ pour une description approfondie du fonctionnement de leur concept de
 
 Document d'origine : Vitalik Buterin - [Sharding FAQ](https://github.com/ethereum/wiki/wiki/Sharding-FAQ)
 
-Traduction : Jean Zundel - [Qu'est-ce que la fragmentation ou _sharding_ ?](https://github.com/asseth/docs-traductions/faq/Sharding-FAQ-fr.md)
+Traduction : Jean Zundel - [Qu'est-ce que la fragmentation ou _sharding_ ?](https://github.com/asseth/docs-traductions/blob/master/faq/Sharding-FAQ-fr.md)
 
