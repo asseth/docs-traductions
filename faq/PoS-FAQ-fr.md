@@ -157,12 +157,11 @@ compte parce que le temps de bloc de Bitcoin est très long (10 minutes) et,
 même avec le temps de bloc d'Ethereum qui est de 14 secondes, la tolérance aux
 défaillances reste d'environ 46%, mais aucune violation fondamentale de la
 théorie de la tolérance aux défaillances byzantines ne se produit. Il faut
-noter que la preuve de travail n’intègre pas le principe selon lequel, s’il y a
-N nodes dont le réseau permet 0,495 
-* N défaillances, les nœuds peuvent disposer d'une puissance différente les uns
-des autres. Cependant des abstractions ont été élaborées permettant de faire
-correspondre la puissance de calcul à un système théorique de tolérance aux
-défaillances de type byzantin.
+noter que la preuve de travail n’intègre pas le principe selon lequel, s’il 
+y a N nodes dont le réseau permet 0,495 * N défaillances, les nœuds peuvent 
+disposer d'une puissance différente les uns des autres. Cependant des 
+abstractions ont été élaborées permettant de faire correspondre la puissance 
+de calcul à un système théorique de tolérance aux défaillances de type byzantin.
 
 Le consensus de preuve d’enjeu (_Proof-of-Stake_) est plus clairement un
 problème de consensus tolérant aux défaillances de type byzantin&nbsp;; tout
@@ -792,4 +791,4 @@ meilleur choix.
 
 <small>Document d'origine : Vitalik Buterin - [Proof of Stake FAQ](https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ)</small>
 
-<small>Traduction : Jean Zundel, Simon Polrot et Alexis Masseron, originellement publiée sur [Ethereum France](https://www.ethereum-france.com/quest-ce-que-la-preuve-denjeu-proof-of-stake-faq-par-v-buterin-traduction-francaise/) - [Qu'est-ce que la preuve d'enjeu ou _Proof of Stake_&nbsp;?](https://github.com/asseth/docs-traductions/blob/master/faq/PoS-FAQ-fr.md)
+<small>Traduction : Jean Zundel, Simon Polrot et Alexis Masseron - [FAQ - Proof of Stake](https://github.com/asseth/docs-traductions/blob/master/faq/PoS-FAQ-fr.md), originellement publiée sur [Ethereum France](https://www.ethereum-france.com/quest-ce-que-la-preuve-denjeu-proof-of-stake-faq-par-v-buterin-traduction-francaise/) - [Qu'est-ce que la preuve d'enjeu ou _Proof of Stake_&nbsp;?](https://github.com/asseth/docs-traductions/blob/master/faq/PoS-FAQ-fr.md)
