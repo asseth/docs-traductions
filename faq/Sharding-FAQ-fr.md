@@ -318,8 +318,8 @@ librement sur quel fragment publier un contrat ou envoyer une
 transaction.**
 
 Si les applications n'ont pas besoin de se parler les unes aux autres,
-le problème est bien plus facile si l'interaction peut être
-asynchrone&nbsp;; c'est-à-dire, si l'interaction peut se produire de
+le problème est bien plus facile puisque l'interaction peut être
+asynchrone&nbsp;; c'est-à-dire que l'interaction peut se produire de
 façon que l'application A génère un reçu puis qu'une transaction sur le
 fragment B «&nbsp;consomme&nbsp;» ce reçu et effectue une action en rapport, et
 éventuellement envoie un «&nbsp;renvoi&nbsp;» au fragment A contenant une
@@ -388,7 +388,7 @@ architecture fragmentée restera toujours à la traîne d'une
 architecture à fragment unique au moins sur certains aspects pour des
 échelles dépassant O(c).
 
-### Quels sont les modèles de sécurité au sein desquels nous opérons&nbsp;? Quelle est la différence entre les modèles traditionnels de tolérance aux défaillances byzantines et les approches plus crypto-économiques comme le modèle de Zamfir ?
+### Quels sont les modèles de sécurité au sein desquels il est possible d'opérer&nbsp;? Quelle est la différence entre les modèles traditionnels de tolérance aux défaillances byzantines et les approches plus crypto-économiques comme le modèle de Zamfir ?
 
 Il existe plusieurs modèles concurrents au sein desquels la sécurité des
 blockchains est évaluée. Le premier est l'hypothèse d'une majorité
@@ -398,8 +398,8 @@ contrôlés par un attaquant&nbsp;; le reste des validateurs suit honnêtement
 le protocole. Un modèle plus solide est l'hypothèse de la majorité non
 coordonnée où on suppose que tous les validateurs sont rationnels au
 sens de la théorie des jeux (sauf l'attaquant, qui est motivé par une
-défaillance du réseau), mais pas plus d'une certaine fraction (souvent
-entre ¼ et ½) est capable de coordonner leurs actions. La preuve de
+défaillance du réseau), mais où seule une certaine fraction (souvent
+entre ¼ et ½) est capable de coordonner ses actions. La preuve de
 travail de Bitcoin avec la [solution au minage égoïste \(_selfish
 mining_\) de Eyal et Sirer](https://arxiv.org/abs/1311.0243) est
 robuste jusqu'à ½ dans l'hypothèse de la majorité non coordonnée.
@@ -484,9 +484,9 @@ réellement indépendant, les validateurs sont sélectionnés
 aléatoirement pour chaque fragment depuis un _pool_ global à chaque
 bloc).
 
-Il en résulte que même alors que seuls quelques nœuds vérifient et
+Il en résulte que même si seuls quelques nœuds vérifient et
 créent les blocs sur chaque fragment à un instant donné, le niveau de
-sécurité n'est en fait pas très amoindri dans un modèle de
+sécurité est en fait peu amoindri dans un modèle de
 majorité honnête/non coordonnée par rapport à une situation où chaque nœud vérifie et
 crée des blocs. C'est une simple question de statistiques&nbsp;: si l'on
 suppose une supermajorité de ⅔ dans l'ensemble global et si la taille
@@ -514,7 +514,7 @@ Dans le modèle de Zamfir (ou bien dans le modèle de l'«&nbsp;adversaire
 très très adaptatif&nbsp;»), tout n'est pas si simple mais nous y viendrons
 plus tard. Notons qu'en raison des imperfections de l'échantillonnage,
 le seuil de sécurité décroît de ½ à ⅓, mais cette perte de sécurité
-reste étonamment basse pour un gain potentiel de 100 à 1000x en
+reste très basse pour un gain potentiel de 100 à 1000x en
 passage à l'échelle sans perte de décentralisation.
 
 ### Comment faites vous concrètement cet échantillonnage en preuve de travail, et en preuve d'enjeu&nbsp;?
@@ -560,13 +560,13 @@ cette solution de preuve de travail détermine sur quel fragment ils
 peuvent travailler ensuite, et ainsi de
 suite<sup>[8](#ftnt_ref8)</sup>. Notons que toutes ces approches
 rendent la preuve de travail d'une certaine manière «&nbsp;_stateful_&nbsp;»,
-qu'elles impliquent une mémoire de l'état&nbsp;; cette nécessité est
+qu'elles impliquent une mémoire de l'état&nbsp;; cette implication est
 fondamentale.
 
 ### Quels sont les compromis nécessaires pour un échantillonnage plus ou moins fréquent&nbsp;?
 
 La fréquence de sélection dépend simplement de la nature adaptative
-des adversaire auxquels le réseau doit faire face pour rester sûr. Par
+des adversaires auxquels le réseau doit faire face pour rester sûr. Par
 exemple, si l'on croit qu'une attaque adaptative (comme des
 validateurs malhonnêtes qui découvrent qu'ils font partie du même
 échantillon et qui se regroupent en coalition) peut se produire en 6
@@ -582,7 +582,7 @@ fois que les validateurs sont tirés au sort, ceux-ci doivent
 télécharger la totalité de l'état du nouveau fragment dans lequel ils
 se trouvent. Cela demande à la fois une politique de contrôle étroit
 de la taille de l'état (en s'assurant économiquement que la taille de
-l'état ne croît pas trop, que ce soit en supprimant les anciens
+l'état ne croîsse pas trop, que ce soit en supprimant les anciens
 comptes, en restreignant le taux de création de nouveaux comptes ou
 une combinaison des deux) et un temps de tirage au sort assez long pour
 bien fonctionner.
@@ -591,7 +591,7 @@ Actuellement, le client Parity peut télécharger et vérifier un _snapshot_,
 un instantané d'état Ethereum complet par «&nbsp;_warp-sync_&nbsp;» en
 ~10 minutes&nbsp;; si nous divisons par 5 pour compenser les problèmes
 temporaires en rapport avec les attaques récentes par déni de service
-et augmentons de 20x pour compenser un usage croissant (10 tx/sec au
+et multiplions par 20 pour prendre en compte un usage croissant (10 tx/sec au
 lieu de l'actuel 0,5 tx/sec) (nous supposons que les politiques de
 contrôle de la taille de l'état à venir et la «&nbsp;poussière&nbsp;» due à
 l'usage sur le long terme ont tendance à s'annuler), nous obtenons un
@@ -600,7 +600,7 @@ des périodes de 12-24 heures mais pas moins sont sûres.
 
 Il y a deux voies possibles pour affronter ce défi.
 
-### Pouvons-nous forcer à détenir plus d'état côté utilisateur pour que les transactions puisssent être validées sans demander aux validateurs de détenir toutes les données d'état&nbsp;?
+### Est-il possible de forcer les utilisateurs à détenir plus d'état pour que les transactions puisssent être validées sans demander aux validateurs de détenir toutes les données d'état&nbsp;?
 
 Ces techniques demandent aux utilisateurs de stocker des données
 d'état et de fournir des preuves de Merkle avec toutes les
@@ -624,9 +624,9 @@ défauts. D'abord, elle introduit une surcharge O(log(n)), bien que
 l'on puisse soutenir que cette dernière ne soit pas si énorme que ce
 qu'il y paraît car elle garantit que le validateur peut se contenter
 de conserver les données d'état en mémoire, donc sans jamais impliquer
-d'accéder au disque<sup>[9](#ftnt_ref9)</sup>. Ensuite, elle peut
+d'accès au disque<sup>[9](#ftnt_ref9)</sup>. Ensuite, elle peut
 facilement être appliquée si les objets d'état auxquels on accède dans
-une transaction sont statiques, ce qui est en revanche plus difficile
+une transaction sont statiques. C'est en revanche plus difficile
 si les objets en question sont dynamiques - c'est-à-dire si
 l'exécution de la transaction comporte du code de la forme
 `read(f(read(x)))` où l'adresse d'une lecture d'état dépend du
@@ -659,12 +659,12 @@ elles ont le droit d'accéder et qui contiennent les preuves de tout
 l'état de ces contrats. Notons que cela ne s'applique qu'au moment de
 la diffusion initiale de ces contrats&nbsp;; une fois une transaction
 incluse dans un bloc, l'ordre d'exécution est fixé et donc seule la
-preuve de Merkle minimal correspondant à l'état auquel on doit
-réellement accéder peut être fourni.
+preuve de Merkle minimale correspondant à l'état auquel on doit
+réellement accéder peut être fournie.
 
-Si les validateurs ne sont pas immédiatement tirés à nouveau au sort,
-il y a encore une opportunité d'augmenter l'efficience. Nous pouvons
-attendre des validateurs qu'ils stockent les données des preuves de
+Si les validateurs ne sont pas immédiatement tirés au sort à nouveau,
+il y a encore une opportunité pour augmenter l'efficience. Les validateurs 
+pourraient stocker les données des preuves de
 transactions qui ont déjà été traitées, afin que ces données n'aient
 pas à être renvoyées&nbsp;; si k transactions sont envoyées pendant une
 période de tirage au sort, cela abaisse e la taille moyenne d'une preuve
@@ -693,12 +693,12 @@ catégories&nbsp;:
 Les blockchains actuelles amalgament massivement ces trois
 catégories. Notons en particulier que, même dans les systèmes qui
 n'ont pas de notion d'arbre d'état de Merkle, le calcul de l'état et
-la disponibilité des données sont très mélangés car ces systèmes ont
+la disponibilité des données sont confondus car ces systèmes ont
 une notion de «&nbsp;transaction valide&nbsp;» où la validité dépend de l'état -
 par exemple une transaction ne peut être valide que si, dans l'état
 courant, le compte de l'expéditeur détient les fonds nécessaires pour
 l'honorer. Cet amalgame est d'une certaine manière commode mais réduit
-aussi fortement le spectre des concepts de blockchains possibles.
+aussi fortement le spectre des concepts possibles de blockchains.
 
 On peut imaginer un concept qui sépare ces trois composantes, ou du
 moins qui sépare le calcul de l'état des deux autres parties. Cela
@@ -713,7 +713,7 @@ l'état pour include des blocs. Un processus à part calculerait alors
 l'état de tous les fragments&nbsp;; ce processus pourrait être beaucoup
 plus robuste puisqu'il pourrait postuler que les données sur lesquelles il
 opère sont totalement disponibles (vous verrons dans les sections
-suivantes pourquoi ceci est tellement important).
+suivantes pourquoi c'est tellement important).
 
 ### Comment l'aléa de l'échantillonnage aléatoire est-il généré&nbsp;?
 
@@ -784,23 +784,23 @@ le maximum attendu de N échantillons aléatoires se trouve légèrement sous M
 + S \* sqrt(2 \* log(N)) où M est la moyenne et S est la déviation
 standard. La récompense issue de la manipulation de l'aléa et du rejeu
 des dés (c'est-à-dire l'accroissement de N) chute brutalement. Par
-exemple avec 0 réessais la récompense espérée est de 100$, avec 1
-réessai elle est de 105,5$, avec deux elle est de 108,5$, avec trois
+exemple avec 0 tenative la récompense espérée est de 100$, avec 1
+tentative elle est de 105,5$, avec deux elle est de 108,5$, avec trois
 elle est de 110,3$, avec quatre elle est de 111,6$, avec cinq elle est
-de 112,6$ et avec six de 113,5$. Donc, après cinq réessais, ce n'est
+de 112,6$ et avec six de 113,5$. Donc, après cinq tenatives, ce n'est
 plus intéressant. Il en résulte qu'un attaquant économiquement motivé
 avec dix pour cent des mises dépensera (avec un coût social) 5$ pour
 un gain supplémentaire de 13$, pour un bénéfice net de 8$.
 
-Cependant, ce genre de raisonnement supppose qu'un seul rejeu de dés
-soit coûteux. De nombreux algorithmes de preuve d'enjeu anciens ont
+Cependant, ce genre de raisonnement supppose qu'une seule relance de dés
+soit coûteuse. De nombreux algorithmes de preuve d'enjeu anciens ont
 une vulnérabilité de _stake grinding_ où relancer les dés signifie
 simplement effectuer un calcul sur son ordinateur&nbsp;; les algorithmes
 comportant cette vulnérabilité sont bien sûr inacceptables
 dans un contexte de fragmentation. Les nouveaux algorithmes (voir la
 section sur la sélection des validateurs dans la [FAQ de la preuve
 d'enjeu](https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ))
-font en sorte que le rejeu implique d'abandonner sa place dans le
+font en sorte que la nouvelle tentative implique d'abandonner sa place dans le
 processus de création de bloc, avec les récompenses et les frais
 associés. La mailleure manière d'atténuer l'impact d'attaques marginales
 économiquement motivées sur la sélection des échantillons
@@ -819,8 +819,8 @@ graine d'aléa servant à sélectionner les échantillons. Ces signatures
 ont comme propriété de garantir qu'une valeur reste la même, peu
 importe qui d'un ensemble de participant fournit des données à
 l'algorithme, pourvu qu'au moins ⅔ des participants soient
-honnêtes. Cette approche est plus évidemment inexploitable
-économiquement, et totalement résistant à toutes les formes de _stake
+honnêtes. Cette approche est plus clairement inexploitable
+économiquement, et totalement résistante à toutes les formes de _stake
 grinding_, mais elle comporte plusieurs faiblesses&nbsp;:
 
 - **Elle dépend d'une cryptographie complexe** (en particulier les
@@ -854,7 +854,7 @@ l'échantillon pour faire ce qui lui plaît, soit il contrôle
 directement une majorité de l'échantillon et peut le diriger pour
 effectuer des actions à bas coût (O(c), pour être précis).
 
-À ce point, l'attaquant peut conduire des attaques à 51% contre cet
+Parvenu à ce point, l'attaquant peut conduire des attaques à 51% contre cet
 échantillon. La menace est aggravée par le risque de
 contagion inter-fragment&nbsp;: si l'attaquant corrompt l'état d'un
 fragment, il peut alors commencer à envoyer des quantités illimitées
@@ -862,12 +862,12 @@ de fonds vers d'autres fragments, entre autres forfaits. L'un dans
 l'autre, la sécurité du modèle de Zamfir n'est pas meilleure que celle
 de la création de O(c) altcoins.
 
-### Comment pouvons-nous améliorer la situation&nbsp;?
+### Comment améliorer la situation&nbsp;?
 
-L'un des mécanismes sur lesquels nous pouvons nous appuyer est
-l'existence de fragments extérieurs auxquels nous pouvons soumettre
-des preuves. En cas d'attaque à 51% contre une chaîne et que les
-données la concernant sont indisponibles, nous pouvons mettre en place
+L'un des mécanismes sur lesquels il est possible de s'appuyer est
+l'existence de fragments extérieurs auxquels des des preuves sont soumises. 
+En cas d'attaque à 51% contre une chaîne rendant les
+données la concernant indisponibles, il est possible de  mettre en place
 des mécanismes de défi-réponse où des utilisateurs (parfois appelés «
 pêcheurs&nbsp;»<sup>[13](#ftnt_ref13)</sup> peuvent lancer des défis
 affirmant que certaines données sont indisponibles et, jusqu'à ce que
@@ -875,8 +875,8 @@ des réponses soient publiées, les utilisateurs sauraient qu'il ne faut
 pas faire confiance à cette chaîne. Nous pouvons également essayer de
 détecter les situations où une chaîne est «&nbsp;attaquée&nbsp;» et faire en
 sorte qu'un mécanisme «&nbsp;gestionnaire&nbsp;» global monte brutalement les
-récompenses et les pénalités afin que que la continuation de l'attaque
-devienne de plus en plus coûteuse. Nous pouvons créer des mécanismes
+récompenses et les pénalités afin que que la poursuite de l'attaque
+devienne de plus en plus coûteuse. On peut également créer des mécanismes
 où l'un d'entre eux joue le rôle de point de contrôle sur l'accord
 sur l'état du fragment, en empêchant ce fragment de régresser jusqu'à
 un point antérieur à ce point de contrôle (le mécanisme de
@@ -903,8 +903,8 @@ libre par un marché de prédiction. Le système de finalité du Mauve
 Paper s'oriente vers cette dernière solution. 
 
 Cette approche fonctionne très bien
-si nous l'utilisons pour la validation d'état et la disponibilité des
-données est supposée déjà résolue de manière que la malfaisance puisse
+si nous l'utilisons pour la validation d'état et que la disponibilité des
+données est supposée déjà résolue, de manière que la malfaisance puisse
 toujours être prouvée. Une faiblesse majeure apparaît néanmoins quand
 on veut l'utiliser pour vérifier la disponibilité des données
 elle-même&nbsp;: alors que celle-ci peut être prouvée, si nécessaire en
@@ -912,7 +912,7 @@ fournissant simplement les données, l'indisponibilité des données à
 l'instant X ne peut jamais être prouvée aux validateurs qui ne peuvent
 effectuer de vérifications qu'après l'instant X. Si le système
 ci-dessus est appliqué directement, des acteurs malveillants peuvent
-publier un bloc contenant des données non disponibles, puis permettre
+publier un bloc contenant des données non disponibles, puis commencer
 l'escalade du jeu de défi-réponse, et enfin publier soudainement les
 données, rendant de ce fait ridicules tous ceux qui avaient
 auparavant déclaré (à raison) que les données étaient
@@ -946,14 +946,14 @@ En quelque sorte. Tout d'abord, il faut noter que la preuve de travail
 et la preuve d'enjeu simple, même sans fragmentation, ont toutes les
 deux une sécurité très faible dans un modèle de Zamfir&nbsp;; un bloc n'est
 vraiment «&nbsp;finalisé&nbsp;» dans le sens zamfirien qu'après un temps O(n)
-(si seulement quelques blocs ont passé, alors le coût économique de
+(si seulement quelques blocs ont été validés, alors le coût économique de
 remplacement de la chaîne est simplement le coût de démarrage d'une
 double dépense à partir d'avant le bloc en
 question). Casper résoud ce problème en ajoutant son mécanisme de
 finalité afin que la marge de sécurité économique augmente
 exponentiellement plutôt que linéairement. Les validateurs acceptent
 de miser de manière exponentielle parce qu'ils (i) voient que d'autres
-validateurs misent, et (ii) ils ont vérifié personnellement toutes les
+validateurs misent, et (ii) ont vérifié personnellement toutes les
 transitions d'état et peuvent donc conclure qu'il n'y a aucune chance
 pour qu'ils signent une chaîne invalide. Dans une chaîne fragmentée,
 si nous voulons une finalité économique, nous devons élaborer une
@@ -963,14 +963,14 @@ uniquement sur un échantillon aléatoire, alors que le validateur
 lui-même est convaincu que le modèle de Zamfir est exact et que
 l'échantillon aléatoire est potentiellement corrompu.
 
-### Comment pouvons-nous utiliser des facteurs douloureux pour analyser ceci&nbsp;?
+### Comment utiliser des facteurs douloureux (_griefing factors_) pour analyser ceci&nbsp;?
 
 L'un des approches possibles consiste à créer un protocole et à
 présenter une stratégie selon ce protocole qui atteint la finalité,
 montrer comment dans des conditions normales cette stratégie maximise
 les profits, et puis aussi montrer que la stratégie a un facteur
 douloureux limité. Un facteur douloureux peut être grossièrement
-défini comme suite&nbsp;: l'acteur A sous le protocole P avec la stratégie
+défini comme suit&nbsp;: l'acteur A sous le protocole P avec la stratégie
 S a un facteur douloureux x si des acteurs malveillants acceptant de
 dépenser k$ peuvent faire perdre k$ \* x à A. On note que les facteurs
 douloureux sont souvent dépendants de la situation et peuvent
