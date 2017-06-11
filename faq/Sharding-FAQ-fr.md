@@ -2,8 +2,8 @@
 
 ### Introduction
 
-Actuellement, tous les protocoles des blockchains dépendent d'un
-modèle où tous les nœuds stockent tous les états (soldes de comptes,
+Aujourd'hui, tous les protocoles des blockchains dépendent d'un
+modèle où tous les nœuds stockent tous les «&nbsp;états&nbsp;» (ou _states_ : soldes de comptes,
 code et stockage de contrat, etc.) et traitent toutes les
 transactions. Cela fournit une sécurité importante mais limite
 énormément le passage à l'échelle, ou _scaling_, des blockchains&nbsp;: une
@@ -12,7 +12,7 @@ réseau. C'est en grande partie à cause de cela que Bitcoin est limité
 à \~3-7 transactions par seconde, Ethereum à 7-15, etc. Cependant,
 cela pose une question&nbsp;: y a-t-il de moyen créer une nouvelle sorte de
 mécanisme de blockchain, qui se démarquerait du modèle où
-littéralement chaque ordinateur du réseau vérifie littéralement chaque
+chaque ordinateur du réseau vérifie littéralement chaque
 transaction, et qui ne requerrait que de petits sous-ensembles de
 nœuds pour vérifier chaque transaction&nbsp;? Tant qu'il existe
 suffisamment de nœuds pour vérifier les transactions de manière
@@ -23,7 +23,7 @@ considérablement le débit de la chaîne&nbsp;?
 
 ### Quelles sont les manières triviales mais défectueuses de résoudre ce problème&nbsp;?
 
-Il y a trois catégories de «&nbsp;solutions faciles&nbsp;». La première consiste
+Il y a trois catégories de solutions «&nbsp;faciles&nbsp;». La première consiste
 à abandonner le passage à l'échelle de chaque blockchain et de
 supposer que les utilisateurs vont employer plusieurs «&nbsp;altcoins&nbsp;». 
 Cela augmente de beaucoup le débit mais au prix de la sécurité&nbsp;:
@@ -33,10 +33,10 @@ viable pour de grandes valeurs de N.
 
 La deuxième repose simplement sur la limitation de la taille des
 blocs. Cela peut fonctionner jusqu'à un certain point, et dans
-certaines situations peut constituer la solution correcte car la
-taille des blocs peuvent être plus contraintes par la politique que
-par des considération strictement techniques mais, indépendamment des
-croyances des uns et des autres concernant des cas précis, ce type
+certaines situations peut constituer la solution correcte, cependant la
+taille des blocs peut être davantage contrainte par la politique que
+par des considération strictement techniques. Indépendamment des
+croyances des uns et des autres concernant ce cas précis, ce type
 d'approche a des limites inévitables&nbsp;: si on va trop loin, les nœuds
 tournant sur du matériel générique abandonneront la partie, le réseau
 commencera à dépendre uniquement d'un très petit nombre de
@@ -53,7 +53,6 @@ la sécurité. Se pose cependant le problème de l'accroissement de la
 charge de calcul et de stockage sur chaque mineur d'un facteur N, et
 cette solution n'est donc qu'une forme cachée d'augmentation de la
 taille des blocs.
-
 
 Même si l'on considère que c'est acceptable, il reste le défaut que
 les chaînes ne sont pas vraiment «&nbsp;liées ensembles&nbsp;»&nbsp;; seul un petit
@@ -137,7 +136,7 @@ supposer que n = O(k \* log(k)) et tout faire reposer sur **n**
 (taille de l'écosystème) et **c** (puissance de calcul d'un seul nœud)
 est un modèle qui nous comvient parfaitement.
 
-### Quelles sont les manières modérément simples mais seulement partielles de résoudre le problème du passage à l'échelle&nbsp;?
+### Quelles sont les méthodes relativement simples, mais qui permettent seulement de résoudre partiellement le problème du passage à l'échelle&nbsp;?
 
 De nombreuses propositions de fragmentation (comme [cette ancienne
 proposition de fragmentation BFT de Loi Luu et al. à la
@@ -156,8 +155,8 @@ travail résultant du stockage de l'état, du traitement des transactions et mê
 du téléchargement et de la rediffusion des transactions est répartie
 sur tous les nœuds.
 
-On note en particuler que cela demande des changements au niveau P2P
-car un modèle de diffusion générale ne passe pas à l'échelle puisqu'il
+On note en particuler que cela demande des changements au niveau du protocole P2P
+car un modèle de diffusion générale ne passe pas à l'échelle dans la mesure où il
 demande à chaque nœud de télécharger et rediffuser O(n) données
 (chaque transaction envoyée), alors que notre critère de
 décentralisation suppose que chaque nœud n'a accès qu'à O(c)
@@ -204,7 +203,7 @@ Ethereum du [_fastsyncing_](https://github.com/ethereum/go-ethereum/pull/1889)
 et du
 [_warp syncing_](https://github.com/ethcore/parity/wiki/Warp-Sync).
 
-Aucune de ces solutions ne peut quoi que ce soit à la croissance de la taille de l'état ou aux limites du traitement des transactions en ligne.
+Aucune de ces solutions ne peut faire quoi que ce soit pour croissance de la taille de l'état ou les limites du traitement des transactions en ligne.
 
 
 ### Taille de l'état, historique, crypto-économie, houla ! Définissez certains de ces termes avant d'aller plus loin !
@@ -261,7 +260,7 @@ Aucune de ces solutions ne peut quoi que ce soit à la croissance de la taille d
 
 ### Quel est le principe fondamental de la fragmentation&nbsp;?
 
-Nous éclatons l'état en K = O(n / c) partitions que nous appelons «
+Il s'agit d'éclater l'état en K = O(n / c) partitions, appelées «
 fragments&nbsp;» (_shards_). Par exemple, un système de fragmentation sur
 Ethereum peut mettre toutes les adresses commençant par 0x00 dans un
 fragment, toutes les adresses commençant par 0x01 dans un autre,
@@ -284,11 +283,11 @@ peuvent dans certains cas affecter plusieurs fragments et peuvent
 également demander des données en synchrone depuis les états d'autres
 fragments.
 
-On peut voir les fragments dans les systèmes les plus simples comme
+On peut voir les fragments, dans les systèmes les plus simples, comme
 étant des blockchains semi-indépendantes et lâchement connectées qui
 font toutes partie d'un réseau commun. Dans ces cas, chaque
 utilisateur maintient un client léger sur tous les fragments et les
-validateurs téléchargent complètement et tracent quelques fragments
+validateurs téléchargent entièrement puis tracent quelques fragments
 qui leurs sont assignés à un moment donné&nbsp;; cette approche peut
 supporter des valeurs de n jusqu'à O(c\^2), où le nombre de fragments
 est K = O(c). Les versions plus complexes utilisent des systèmes de
@@ -347,7 +346,7 @@ crée une transaction qui tente de faire les deux réservations, et qui
 lève une exception et annule tout à moins que les deux réservation
 réussissent. Cependant, si elles se trouvent sur des fragments
 différents, les choses se compliquent&nbsp;; même sans se préoccuper des
-aspects crypto-économiques et de la décentralisation, cela revient
+aspects crypto-économiques et de décentralisation, cela revient
 principalement au problème des [transactions atomiques dans les bases
 de
 données](https://fr.wikipedia.org/wiki/Atomicit%C3%A9_%28informatique%29).
