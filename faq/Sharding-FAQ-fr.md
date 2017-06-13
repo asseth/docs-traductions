@@ -1221,10 +1221,10 @@ en incitant fortement à un comportement correct. 
 
 Correct&nbsp;; c'est un vrai problème. Voici une proposition de
 solution. Afin de lancer un appel inter-fragments du fragment A au
-fragment B, l'appelant doit d'abord acheter du «&nbsp;gaz B congelé&nbsp;» (ce
-qui est fait par une transaction dans le fragment B, et enregistré
+fragment B, l'appelant doit d'abord acheter du «&nbsp;gaz B congelé&nbsp;» 
+(par une transaction dans le fragment B, enregistré
 dans le fragment B).  Le gaz congelé du fragment B a un taux de
-demeurage rapide&nbsp;: une fois commandé, il perd 1/k de sa valeur à
+demeurage (coût de possession) rapide&nbsp;: une fois commandé, il perd 1/k de sa valeur à
 chaque bloc. Une transaction sur le fragment A peut alors envoyer le
 gaz B congelé avec le reçu qu'il crée, et il peut être gratuitement
 utilisé sur le fragment B. Les blocs du fragment B allouent un espace
@@ -1233,7 +1233,7 @@ qu'en raison des règles de demeurage, il ne peut y avoir au plus que
 pour GAS\_LIMIT \* k de gaz congelé disponible pour un fragment donné
 à tout moment, qui peut être certainement rempli pendant k locs (en
 fait, encore plus vite en raison du demeurage, mais nous avons besoin
-de cet espace libre en raison des validateurs malveillants).  Au cas
+de cet espace libre en raison des validateurs malveillants).  Dans le cas 
 où trop de validateurs échouent de manière malveillante à inclure les
 reçus, nous pouvons rendre les pénalités plus justes en exemptant les
 validateurs qui remplissent l'«&nbsp;espace de reçus&nbsp;» de leurs blocs avec
@@ -1284,7 +1284,7 @@ IPFS](https://www.youtube.com/watch?v=cU-n_m-snxQ)) à concevoir des
 réseaux capables de passer à l'échelle, dont la caractéristique
 spécifique est de pourvoir être éclatés en fragments à la demande et
 donc de pouvoir continuer à fonctionner autant que possible dans des
-conditions de partitionnement réseau, mais leur fonctionnement correct
+conditions de partitionnement réseau, mais leur fonctionnement 
 comporte des défis crypto-économiques qui ne sont pas triviaux.
 
 L'un des défis majeurs est que si nous voulons une fragmentation fondée
@@ -1296,8 +1296,8 @@ disposer du moyen de choisir les fragments auxquels ils
 participent. C'est dangereux car cela permet des classes d'attaques
 bien plus importantes dans le modèle de la majorité honnête/non
 coordonnée, et donc des attaques très peu coûteuses dans le modèle de
-Zamfir. La fragmentation pour la sécurité de la partition géographique
-et lafragmentation par échantillonnage aléatoire pour l'efficience
+Zamfir. La fragmentation pour l'efficience de la partition géographique
+et la fragmentation pour la sécurité par échantillonnage aléatoire 
 sont deux choses radicalement différentes.
 
 Ensuite, il faudrait une réflexion plus approfondie sur la manière
@@ -1318,10 +1318,10 @@ des temps de bloc ultra-rapides et des frais de transaction moins
 pourraient même être utilisés pour la publication de données et le
 passage de messages.
 
-### Quels sont les défis uniques quand on passe à l'échelle au-delà de n = O(c\^2)&nbsp;?
+### Quels sont les défis spécifiques à relever pour passer à l'échelle au-delà de n = O(c\^2)&nbsp;?
 
 Il faut prendre en compte plusieurs considérations. D'abord,
-l'algorithme devrait être converti d'un algorithme à deux couches à un
+l'algorithme devrait être modifié d'un algorithme à deux couches à un
 algorithe empilable à n couches&nbsp;; c'est possible mais
 complexe. Ensuite, n / c (le rapport entre la charge de calcul totale
 du réseau et la capacité d'un nœud) est une valeur qui se trouve
@@ -1329,9 +1329,9 @@ proche de deux constantes&nbsp;: d'abord, quand on mesure en blocs, un laps
 de temps de plusieurs heures, ce qui est un «&nbsp;temps de confirmation de
 sécurité maximum&nbsp;» acceptable, et ensuite, le rapport entre les
 récompenses et les dépôts (un premier calcul suggère un dépôt de 32
-ETH et une récompense de bloc de 0,05 ETH pour Casper. Cette dernière
+ETH et une récompense de bloc de 0,05 ETH pour Casper). Cette dernière
 a pour conséquence que si les récompenses et les pénalités sur un
-fragment sont escaladées à l'échelle des dépôts des validateurs, le
+fragment remontent au niveau des dépôts des validateurs, le
 coût de continuation de l'attaque sur un fragment sera de taille O(n).
 
 Au-dessus de c\^2, cela impliquerait probablement un affaiblissement
@@ -1341,7 +1341,7 @@ certaines façons sur de longues périodes pour un coût modéré, bien
 qu'il serait toujours possible d'empêcher un état invalide d'être
 finalisé et d'empêcher un état finalisé d'être annulé à moins que les
 attaquants ne veuillent payer un coût de O(n). Cependant, les
-récompenses sont grandes. Une blockchain fragmentée
+avantages sont énormes. Une blockchain fragmentée
 super-quadratiquement pourrait être utilisée comme un outil générique
 pour presque toutes les applications décentralisées et pourrait
 soutenir des frais de transactions qui rendraient son emploi presque
@@ -1359,9 +1359,9 @@ document.
 
 3. <a name="ftnt_ref3"></a> On a ici quelques raisons d'être
 conservateur. En particulier, notons que si un attaquant lance des
-transactions nocives dont le rapport entre le temps de traitemen et
+transactions nocives dont le rapport entre le temps de traitement et
 les dépenses en espace de bloc (octets, gaz, etc.) est beaucoup plus
-haut que d'habitude, alors le système sera victime de très mauvaises
+élevé que d'habitude, alors le système aura de très mauvaises
 performances et un facteur de sécurité s'avère nécessaire pour prendre
 en compte cette possibilité. Dans les blockchains traditionnelles, le
 fait que le traitement des blocs ne prenne que \~1-5% du temps de bloc
@@ -1414,7 +1414,7 @@ pour un fragment donné afin de miner au-dessus de celles-ci.
 sur Ethereum ont prouvé que l'accès au disque dur est un goulet
 d'étranglement crucial pour le passage à l'échelle d'une blockchain.
 
-10. <a name="ftnt_ref10"></a> Vous pouvez demander&nbsp;: eh bien pourquoi
+10. <a name="ftnt_ref10"></a> On peut se demander&nbsp;: eh bien pourquoi
 les validateurs ne récupèrent-ils pas les preuves de Merkle au fil de
 l'eau&nbsp;? Réponse&nbsp;: Parce que c'est une étape de \~100-1000 ms, et
 l'exécution de l'intégralité d'une transaction complexe pendant ce
