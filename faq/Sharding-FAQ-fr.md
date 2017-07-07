@@ -2,17 +2,17 @@
 
 ### Introduction
 
-Aujourd'hui, tous les protocoles des blockchains dépendent d'un
-modèle où tous les nœuds stockent tous les «&nbsp;états&nbsp;» (ou _states_ : soldes de comptes,
+Actuellement, tous les protocoles des blockchains dépendent d'un
+modèle où tous les nœuds stockent tous les états (soldes de comptes,
 code et stockage de contrat, etc.) et traitent toutes les
 transactions. Cela fournit une sécurité importante mais limite
 énormément le passage à l'échelle, ou _scaling_, des blockchains&nbsp;: une
 blockchain ne peut pas traiter plus de transactions qu'un seul nœud du
 réseau. C'est en grande partie à cause de cela que Bitcoin est limité
 à \~3-7 transactions par seconde, Ethereum à 7-15, etc. Cependant,
-cela pose une question&nbsp;: y a-t-il de moyen créer une nouvelle sorte de
-mécanisme de blockchain, qui se démarquerait du modèle où
-chaque ordinateur du réseau vérifie littéralement chaque
+cela pose une question&nbsp;: y a-t-il de moyen créer un nouveau
+mécanisme qui se démarquerait du modèle où
+littéralement chaque ordinateur du réseau vérifie littéralement chaque
 transaction, et qui ne requerrait que de petits sous-ensembles de
 nœuds pour vérifier chaque transaction&nbsp;? Tant qu'il existe
 suffisamment de nœuds pour vérifier les transactions de manière
@@ -23,7 +23,7 @@ considérablement le débit de la chaîne&nbsp;?
 
 ### Quelles sont les manières triviales mais défectueuses de résoudre ce problème&nbsp;?
 
-Il y a trois catégories de solutions «&nbsp;faciles&nbsp;». La première consiste
+Il y a trois catégories de «&nbsp;solutions faciles&nbsp;». La première consiste
 à abandonner le passage à l'échelle de chaque blockchain et de
 supposer que les utilisateurs vont employer plusieurs «&nbsp;altcoins&nbsp;». 
 Cela augmente de beaucoup le débit mais au prix de la sécurité&nbsp;:
@@ -33,10 +33,10 @@ viable pour de grandes valeurs de N.
 
 La deuxième repose simplement sur la limitation de la taille des
 blocs. Cela peut fonctionner jusqu'à un certain point, et dans
-certaines situations peut constituer la solution correcte, cependant la
-taille des blocs peut être davantage contrainte par la politique que
-par des considération strictement techniques. Indépendamment des
-croyances des uns et des autres concernant ce cas précis, ce type
+certaines situations peut constituer la solution correcte car la
+taille des blocs peuvent être plus contraintes par la politique que
+par des considération strictement techniques mais, indépendamment des
+croyances des uns et des autres concernant des cas précis, ce type
 d'approche a des limites inévitables&nbsp;: si on va trop loin, les nœuds
 tournant sur du matériel générique abandonneront la partie, le réseau
 commencera à dépendre uniquement d'un très petit nombre de
@@ -54,7 +54,8 @@ charge de calcul et de stockage sur chaque mineur d'un facteur N, et
 cette solution n'est donc qu'une forme cachée d'augmentation de la
 taille des blocs.
 
-Même si l'on considère que c'est acceptable, il reste le défaut que
+
+Même si l'on considère cette solution acceptable, il reste le défaut que
 les chaînes ne sont pas vraiment «&nbsp;liées ensembles&nbsp;»&nbsp;; seul un petit
 montant d'incitation économique est requis pour convaincre les mineurs
 d'abandonner ou de compromettre une chaîne donnée. Cette possibilité
@@ -134,9 +135,9 @@ puisqu'il existe au moins certains types d'état qui sont spécifiques
 aux relations au lieu d'être spécifiques aux utilisteurs. Donc,
 supposer que n = O(k \* log(k)) et tout faire reposer sur **n**
 (taille de l'écosystème) et **c** (puissance de calcul d'un seul nœud)
-est un modèle qui nous comvient parfaitement.
+est un modèle qui nous convient parfaitement.
 
-### Quelles sont les méthodes relativement simples, mais qui permettent seulement de résoudre partiellement le problème du passage à l'échelle&nbsp;?
+### Quelles sont les manières modérément simples mais seulement partielles de résoudre le problème du passage à l'échelle&nbsp;?
 
 De nombreuses propositions de fragmentation (comme [cette ancienne
 proposition de fragmentation BFT de Loi Luu et al. à la
@@ -145,7 +146,7 @@ que l'approche de [cet arbre
 Merklix](http://www.deadalnix.me/2016/11/06/using-merklix-tree-to-shard-block-validation)<sup>[1](#ftnt_ref1)</sup>
 qui a été suggérée pour Bitcoin) tentent de ne fragmenter que le
 traitement des transactions ou que l'état des fragments, sans toucher
-au reste. Ces efforts sont admirables et peuvent mener à certains
+au reste<sup>[2](#ftnt_ref2)</sup>. Ces efforts sont admirables et peuvent mener à certains
 gains en performances mais leur principal problème est qu'ils ne
 résolvent que l'un des deux goulets d'étranglement. Nous voulons
 pouvoir traiter plus de 10000 transactions par seconde sans forcer
@@ -155,8 +156,8 @@ travail résultant du stockage de l'état, du traitement des transactions et mê
 du téléchargement et de la rediffusion des transactions est répartie
 sur tous les nœuds.
 
-On note en particuler que cela demande des changements au niveau du protocole P2P
-car un modèle de diffusion générale ne passe pas à l'échelle dans la mesure où il
+On note en particuler que cela demande des changements au niveau P2P
+car un modèle de diffusion générale ne passe pas à l'échelle puisqu'il
 demande à chaque nœud de télécharger et rediffuser O(n) données
 (chaque transaction envoyée), alors que notre critère de
 décentralisation suppose que chaque nœud n'a accès qu'à O(c)
@@ -203,7 +204,7 @@ Ethereum du [_fastsyncing_](https://github.com/ethereum/go-ethereum/pull/1889)
 et du
 [_warp syncing_](https://github.com/ethcore/parity/wiki/Warp-Sync).
 
-Aucune de ces solutions ne peut faire quoi que ce soit pour croissance de la taille de l'état ou les limites du traitement des transactions en ligne.
+Aucune de ces solutions ne peut quoi que ce soit à la croissance de la taille de l'état ou aux limites du traitement des transactions en ligne.
 
 
 ### Taille de l'état, historique, crypto-économie, houla ! Définissez certains de ces termes avant d'aller plus loin !
@@ -260,21 +261,92 @@ Aucune de ces solutions ne peut faire quoi que ce soit pour croissance de la tai
 
 ### Quel est le principe fondamental de la fragmentation&nbsp;?
 
-Il s'agit d'éclater l'état en K = O(n / c) partitions, appelées «
-fragments&nbsp;» (_shards_). Par exemple, un système de fragmentation sur
+Nous éclatons l'état en K = O(n / c) partitions que nous appelons 
+«&nbsp;fragments&nbsp;» (_shards_). Par exemple, un système de fragmentation sur
 Ethereum peut mettre toutes les adresses commençant par 0x00 dans un
 fragment, toutes les adresses commençant par 0x01 dans un autre,
 etc. Dans les formes les plus simples de fragmentation, chaque
 fragment possède aussi son propre historique des transactions et les effets
-des transactions dans un fragment k sont limitées à l'état du fragment
-k. Cependant, l'effet d'une transaction peut dépendre d'_évènements
+des transactions dans un fragment k sont limitées à l'état du fragment k. 
+Un exemple simple est celui d'une blockchain multi-actifs où il existe K 
+fragments et où chaque fragment stocke les soldes et traite les transactions 
+associées à un actif particulier. Des formes plus avancées de fragmentation
+intègrent aussi une forme de communication inter-fragments où des transaction 
+dans un fragment peuvent déclencher des événements dans d'autres fragments.
+
+
+### À quoi pourrait ressembler une conception basique d'une blockchain fragmentée ?
+
+En voici une approche simple. Il existe des nœuds appelés **collationneurs**
+(*collators*) qui acceptent des transactions sur le fragment k (selon le
+protocole, les collationneurs peuvent choisir quel k ou se voient assigner un k
+aléatoire) et créent des **collations**. Une collation comporte un **en-tête de
+collation** (*collation header*), un court message de la forme «&nbsp;Ceci est
+une collation de transactons sur le fragment k. La racine d'état précédente du
+fragment k doit être 0x12bc57, la racine de Merkle des transactionsde cette
+collation est 0x3f98ea, et la racine d'état après traitement de ces
+transactions doit être 0x5d0cc1. Signé, les collationneurs #1, 2, 4, 5, 6, 8,
+11, 13 … 98, 99&nbsp;».
+
+Un bloc doit donc contenir un en-tête de collation pour chaque fragment. Un
+bloc est valide si&nbsp;:
+
+1. La pré-racine d'état donnée à chaque collation correspond à la racine d'état du fragment associé&nbsp;;
+2. Toutes les transactions dans toutes les collations sont valides&nbsp;;
+3. La post-racine d'état donnée dans la collation correspond au résultat de l'exécution des transactions de la collation en haut d'un pré-état donné&nbsp;;
+4. La collation est signée par au moins les deux tiers des validateurs.
+
+On remarque qu'il existe maintenant plusieurs « niveaux » de nœuds dans un tel système&nbsp;:
+
+* **Nœud super-complet** - traite toutes les transactions dans toutes les collations et maintient l'état complet de tous les fragments&nbsp;;
+
+* **Nœud de plus haut niveau** - traite tous les blocs de plus haut niveau mais ne traite pas ni n'essaye de télécharger les transactions de chaque collation. En revanche, il croit sur parole qu'une collation est valide si plus des deux tiers des collationneurs de ce fragment disent qu'il est valide.
+
+* **Nœud de fragment** - agit comme un nœud de plus haut niveau mais traite également toutes les transactions et maintient l'état complet d'un fragment donné&nbsp;;
+
+* **Nœud léger** - télécharge et vérifie les en-têtes de bloc des blocs de plus haut niveau uniquement&nbsp;; ne traite pas les en-têtes de collation ni les transactions à moins qu'il n'ait besoin de lire une entrée donnée dans un fragment donné, auquel cas il télécharge la branche de Merkle de l'en-tête de collation le plus récent de ce fragment et, de là, télécharge la preuve de Merkle de la valeur désirée dans l'état.
+
+
+### Quels sont les défis auxquels nous devons répondre&nbsp;?
+
+* **Communication inter-fragments** - le modèle qui précède ne gère pas les communications inter-fragments. Comment pouvons nous l'ajouter de manière sécurisée&nbsp;?
+
+* **Prises de contrôle d'un fragment** - que se faire si un attaquant prend le contrôle d'une majorité des collationneurs d"un fragment donné, que ce soit pour empêcher les collations d'obtenir assez de signatures, pire, pour soumettre des collations invalide&nbsp;?
+
+* **Détection de fraude** - si une collation invalide a lieu, comment es nœuds (y compris les clients légers) peuvent-ils en être informés de manière fiable, de sorte qu'ils puissent vérifier la fraude et rejeter la collation si elle est réellement frauduleuse ?
+
+* **Problème de disponibilité des données** - un sous ensemble de la détection de fraude, que faire quand il manque des données d'une collation&nbsp;?
+
+
+* **Fragmentation super-quadratique** - dans le cas particulier où n > c^2, dans le modèle simple ci-dessus, il y aurait plus de O(c) en-têtes de collations et un nœud ordinaire ne serait donc pas capable de traiter ne serait-ce que les blocs de plus haut niveau. Il en ressort que plus de deux niveaux d'indirection entre les transactions et les en-têtes de blocs de plus haut niveau sont requis (c'est-à-dire que nous avons besoin de «&nbsp;fragments de fragments&nbsp;»). Quelle est la manière la plus simple et la meilleure de mettre cela en œuvre&nbsp;?
+
+
+Cependant, l'effet d'une transaction peut dépendre d'_évènements
 qui ont eu lieu auparavant dans d'autres fragments_&nbsp;; un exemple
 classique est le transfert d'argent où l'argent peut être déplacé du
 fragment i au fragment j en créant d'abord une transaction de «&nbsp;débit
 » qui détruit de la monnaie dans le fragment i, puis en créant une
-transation de «&nbsp;crédit&nbsp;» qui crée de la monnaie dans le fragment j, en
+transaction de «&nbsp;crédit&nbsp;» qui crée de la monnaie dans le fragment j, en
 pointant vers un reçu créé par la transaction de débit attestant de la
 légitimité du crédit.
+
+### Comment pouvons-nous faciliter la communication inter-fragments&nbsp;?
+
+Dans le scénario le plus simple, il y a beaucoup d'applications qui n'ont
+chacune pas beaucoup d'utilisateurs et qui n'interagissent que très
+occasionnellement et de façon très lâche les unes avec les autres&nbsp;; dans
+ce cas, les applications peuvent tourner sur des fragments séparés et
+communiquer entre fragments par reçus (*receipts*).
+
+Cela implique typiquement de séparer une transaction en un «&nbsp;débit&nbsp;»
+et un «&nbsp;crédit&nbsp;». Par exemple, on suppose que nous avons une
+transaction où le compte A sur le fragment M désire envoyer 100 actifs au
+compte B sur le fragment N. Les étapes ressembleraient à ce qui suit&nbsp;:
+
+1. On envoie une transaction sur le fragment M qui (i) déduit 100 *coins* du solde de A et (ii) crée un reçu. Un reçu est un objet qui n'est pas directement sauvegardé dans l'état, mais le fait que le reçu a été généré peut être vérifié par une preuve de Merkle.
+2. On attend que la première transaction soit incluse (on peut demander d'attendre la finalisation, selon le système).
+3. On envoie la transaction vers le fragment N en incluant une preuve de Merkle du reçu de (1). Cette transaction vérifie aussi dans l'état du fragment N que ce reçu n'est pas «&nbsp;dépensé&nbsp;»&nbsp;; si c'est le cas, elle augmente le solde de B de 100 *coins* et écrit dans l'état que le reçu est dépensé.
+4. De manière facultative, la transaction en (3) écrit également un reçu, qui peut alors être utilisé pour effectuer des actions ultérieures sur le fragment M, subordonnées au succès de l'opération d'origine.
 
 <img src="https://github.com/vbuterin/diagrams/raw/master/scalability_faq/image01.png" width="400"></img>
 
@@ -283,61 +355,31 @@ peuvent dans certains cas affecter plusieurs fragments et peuvent
 également demander des données en synchrone depuis les états d'autres
 fragments.
 
-On peut voir les fragments, dans les systèmes les plus simples, comme
-étant des blockchains semi-indépendantes et lâchement connectées qui
-font toutes partie d'un réseau commun. Dans ces cas, chaque
-utilisateur maintient un client léger sur tous les fragments et les
-validateurs téléchargent entièrement puis tracent quelques fragments
-qui leurs sont assignés à un moment donné&nbsp;; cette approche peut
-supporter des valeurs de n jusqu'à O(c\^2), où le nombre de fragments
-est K = O(c). Les versions plus complexes utilisent des systèmes de
-fragments de fragments pour augmenter le n maximum pouvant être
-supporté jusqu'à O(exp(c)).
-
-L'un des principaux défis de la fragmentation est de déterminer le
-mécanisme par lequel les historiques de chaque fragment sont acceptés
-par tout le monde et par lequel l'état de chaque fragment est
-déterminé. La question est&nbsp;: pouvons-nous casser le trilemme et le
-faire de manière que chaque fragment ait une «&nbsp;force économique&nbsp;» de
-O(n), bien que ne disposant que de O(n / c) de puissance économique
-pour vérifier ce fragment à un moment donné&nbsp;? Comme le soutient ce
-document, de nombreux défis existent et de nombreux compromis sont
-nécessaires mais il est très probable que, oui, nous le
-pouvons.<sup>[6](#ftnt_ref6)</sup>.
-
 ### Comment différentes sortes d'applications peuvent-elles s'intégrer à une blockchain fragmentée&nbsp;?
 
-Le scénario le plus simple est celui où il y a un très grand nombre
-d'applications qui chacune n'ont pas trop d'utilisateurs et interagissent très
-occasionnellement les unes avec les autres&nbsp;; dans ce
-cas, les applications peuvent tout simplement vivre sur des fragments
-séparés et communiquer entre fragments par des reçus pour se
-parler. Il faut noter que dans tous les modèles proposés ici, **les
-utilisateurs et les développeurs d'applications peuvent choisir
-librement sur quel fragment publier un contrat ou envoyer une
-transaction.**
-
-Si les applications n'ont pas besoin de se parler les unes aux autres,
-le problème est bien plus facile puisque l'interaction peut être
-asynchrone&nbsp;; c'est-à-dire que l'interaction peut se produire de
-façon que l'application A génère un reçu puis qu'une transaction sur le
-fragment B «&nbsp;consomme&nbsp;» ce reçu et effectue une action en rapport, et
-éventuellement envoie un «&nbsp;renvoi&nbsp;» au fragment A contenant une
-réponse. La généralisation de cet exemple est facile et il n'est pas
-difficile à incorporer dans un langage de programmation de haut
-niveau.
+Certaines applications ne demandent absolument aucune interaction entre
+fragments&nbsp;; les blockchains multi-actifs et les blockchains avec des
+applications complètement hétérogènes qui n'exigent aucune interopérabilité, en
+sont les cas les plus simples. Si des applications ont besoin de communiquer,
+en revanche, le défi est plus facile à relever si l'interaction peut être
+asynchrone, c'est-à-dire si l'interaction peut être mise en œuvre en faisant
+générer un reçu par la transaction sur le fragment A, une transaction sur le
+fragment B «&nbsp;consommant&nbsp;» ce reçu en effectuant une action en
+dépendant, et envoyant éventuellement un «&nbsp;_callback_&nbsp;» au fragment A
+contenant une réponse. La généralisation de ce modèle est facile et elle n'est
+pas difficile à intégrer dans un langage de haut niveau.
 
 Notons cependant que les mécanismes internes au protocole qui seraient
-employés pour des communications inter-fragments seraient différents
+employés pour des communications inter-fragments asynchrones seraient différents
 et leurs fonctionnalités seraient réduites par rapport aux mécanismes
 disponibles pour la communication intra-fragment. Une partie des
 fonctionnalités actuellement disponibles dans les blockchains
 classiques ne seraient disponibles, dans une blockchain pouvant passer à l'échelle,
-que pour la communication intra-fragment.<sup>[7](#ftnt_ref7)</sup>.
+que pour la communication intra-fragment.<sup>[6](#ftnt_ref6)</sup>.
 
-Faire ce que l'on désire sur une blockchain en n'utilisant que des
-outils asynchrones n'est pas toujours facile. Pour le montrer,
-considérons l'exemple suivant fourni par Andrew Miller. Supposons
+### Quel est le problème de l'avion et de l'hôtel&nbsp;?
+
+Considérons l'exemple suivant fourni par Andrew Miller. Supposons
 qu'un utilisateur veuille acheter un billet d'avion et réserver un
 hôtel, et désire s'assurer que l'opération est atomique - soit les
 deux réservations sont faites, soit aucune. Si le billet d'avion et la
@@ -346,7 +388,7 @@ crée une transaction qui tente de faire les deux réservations, et qui
 lève une exception et annule tout à moins que les deux réservation
 réussissent. Cependant, si elles se trouvent sur des fragments
 différents, les choses se compliquent&nbsp;; même sans se préoccuper des
-aspects crypto-économiques et de décentralisation, cela revient
+aspects crypto-économiques et de la décentralisation, cela revient
 principalement au problème des [transactions atomiques dans les bases
 de
 données](https://fr.wikipedia.org/wiki/Atomicit%C3%A9_%28informatique%29).
@@ -357,7 +399,9 @@ fois que les deux réservations ont réussi, confirmer les deux&nbsp;; les
 mécanismes de réservation empêcheraient alors qui que ce soit de
 réserver (ou du moins s'assurer qu'il reste suffisamment de places
 pour que toutes les réservations soient confirmées) pendant un certain
-temps. Avec les transactions inter-fragments synchrones, le problème
+temps. 
+
+Avec les transactions inter-fragments synchrones, le problème
 est plus facile mais le défi de créer une solution de fragmentation
 capable de rendre les transactions synchrones atomiques est en soi non
 trivial.
@@ -388,69 +432,46 @@ architecture fragmentée restera toujours à la traîne d'une
 architecture à fragment unique au moins sur certains aspects pour des
 échelles dépassant O(c).
 
-### Quels sont les modèles de sécurité au sein desquels il est possible d'opérer&nbsp;? Quelle est la différence entre les modèles traditionnels de tolérance aux défaillances byzantines et les approches plus crypto-économiques comme le modèle de Zamfir ?
+### Quels sont les modèles de sécurité au sein desquels nous opérons&nbsp;?
 
 Il existe plusieurs modèles concurrents au sein desquels la sécurité des
-blockchains est évaluée. Le premier est l'hypothèse d'une majorité
-honnête (ou super-majorité honnête) où l'on suppose qu'il existe un
+blockchains est évaluée. 
+
+* **Majorité honnête** (ou supermajorité honnête)&nbsp;:
+on suppose qu'il existe un
 ensemble de validateurs et jusqu'à ½ (ou ⅓ ou ¼) de ceux-ci sont
 contrôlés par un attaquant&nbsp;; le reste des validateurs suit honnêtement
-le protocole. Un modèle plus solide est l'hypothèse de la majorité non
-coordonnée où on suppose que tous les validateurs sont rationnels au
-sens de la théorie des jeux (sauf l'attaquant, qui est motivé par une
-défaillance du réseau), mais où seule une certaine fraction (souvent
-entre ¼ et ½) est capable de coordonner ses actions. La preuve de
-travail de Bitcoin avec la [solution au minage égoïste \(_selfish
-mining_\) de Eyal et Sirer](https://arxiv.org/abs/1311.0243) est
-robuste jusqu'à ½ dans l'hypothèse de la majorité non coordonnée.
+le protocole. 
 
-Quel que soit le modèle de majorité, une question importante est&nbsp;:
-quand «&nbsp;l'attaquant&nbsp;» choisit-il les nœuds à corrompre&nbsp;? De nombreux
-protocoles choisissent et désignent aléatoirement le sous-ensemble de
-validateurs responsables d'une tâche de consensus à effectuer à
-l'avance&nbsp;; si l'attaquant peut choisir les nœuds après que ce
-processus d'assignation a eu lieu (comme en hackant les nœuds ou _via_
-les opérateurs des nœuds qui se connectent entre eux pour se
-coaliser), c'est-à-dire que l'attaquant est un **adversaire
-adaptatif**, alors il peut faire des dégâts dans le protocole en se
-contentant de ne corrompre que quelques nœuds, mais si l'attaquant
-doit choisir avant cela (l'attaquant étant un **adversaire
-probabiliste**) alors il doit corrompre une ample fraction de tous les
-nœuds afin d'avoir une chance de corrompre un sous-ensemble.
+* **Majorité non coordonnée**&nbsp;: on suppose que tous les validateurs sont rationnels au
+sens de la théorie des jeux (sauf l'attaquant, qui désire créer une
+défaillance du réseau), mais pas plus d'une certaine fraction (souvent
+entre ¼ et ½) est capable de coordonner leurs actions. 
 
-Le modèle de Zamfir est encore plus solide. Il possède les propriétés
-suivantes&nbsp;:
+* **Choix coordonné**&nbsp;: nous supposons que tous les validateurs sont contrôlés par le même acteur, ou sont pleinement capables de se coordonner sur le choix économiquement optimal. Nous pouvons parler des **coûts de la coalition** (ou des profits de la coalition) pour arriver à un certain résultat.
 
-- **Les majorités peuvent être malhonnêtes et peuvent comploter**. La
-    collusion peut se produire soit par corruption crypto-économique à
-    travers la réputation ou des contrats autonomes, des cartels
-    socialement organisés, ou dans des versions plus extrêmes de ce
-    modèle par 51% de la monnaie étant controlée par un acteur
-    disposant physiquement des clefs privées.
-- **L'attaquant a un certain «&nbsp;budget&nbsp;»** qu'il est théoriquement
-    disposé à dépenser (soit en perdant l'argent en coûts et pénalités
-    intrinsèques au protocole, soit par la corruption d'autre
-    opérateurs). Ce budget est proportionnel à O(n), bien que, comme
-    nous le verrons plus loin, il existe des attaques limitées qui
-    peuvent réussir avec un simple budget de O(c) contre lesquelles on
-    ne puisse pas se défendre.
-- Le modèle de Zamfir comprend parfois une **hypothèse de minorité
-  honnête/non coordonnée**, où par exemple au moins ⅛ de tout «
-  ensemble économique&nbsp;» (mineurs, validateurs) est censé être honnête
-  (du moins non coordonné) à tout instant. La présence d'altruistes
-  capables de donner de l'argent ou d'accepter des pertes est
-  également postulée, mais on suppose aussi que le capital que les
-  altruistes peuvent brûler est bien inférieur au budget de
-  l'attaquant.
+* **Modèle de l'attaquant corrupteur**&nbsp;: nous prenons le modèle de majorité non coordonnée mais, au lieu que l'attaquant soit l'un des participants, celui-ci reste hors du protocole et a la possibilité de soudoyer n'importe quel participant pour changer son comportement. Les attaquants sont modélisés comme ayant un **budget**, qui est le maximum qu'ils peuvent payer, et nous pouvons parler de leurs **coûts**, le montant qu'ils _finissent par payer_ pour déséquilibrer le protocole.
 
-Le but est d'arriver à ce que tout comportement, même de la part d'une coalition
-majoritaire, qui viole les garanties du protocole ou qui réduit les
-performances, soit coûteux, et d'arriver à maximiser ce coût. Notons que
-certains types d'attaques comme les [attaques P +
-epsilon](https://blog.ethereum.org/2015/01/28/p-epsilon-attack/)
-demandent un gros budget mais leur coût est bas&nbsp;: l'attaquant doit
-s'engager de manière crédible à dépenser beaucoup d'argent si
-nécessaire mais, s'il réussit, les attaques sont très peu coûteuses.
+
+La preuve de travail de Bitcoin avec la [solution au minage égoïste \(_selfish
+mining_\) de Eyal et Sirer](https://arxiv.org/abs/1311.0243) est robuste
+jusqu'à ½ dans l'hypothèse de la majorité non coordonnée.
+[Shellingcoin](https://blog.ethereum.org/2014/03/28/schellingcoin-a-minimal-trust-universal-data-feed/)
+reste robuste jusqu'à ½ dans les hypothèses de la majorité honnête et de la
+majorité non coordonnée, a un coût d'attaque de ε (c'est-à-dire légèrement
+supérieur à zéro) dans un modèle de choix coordonné, et demande un budget de P
++ ε et un coût de ε dans un modèle d'attaquant corrupteur en raison des
+[attaques P + epsilon](https://blog.ethereum.org/2015/01/28/p-epsilon-attack/).
+
+Il existe aussi des modèles hybrides&nbsp;; par exemple, même dans les modèles
+de choix coordonné et d'attaquant corrupteur, il est courant de faire une
+**hypothèse de minorité honnête** où une partie (peut-être entre 1 et 15%) des
+validateurs agissent de manière altruiste quelles que soient les incitations.
+Nous pouvons alors parler des coalitions rassemblant entre 50 et 99% des
+validateurs qui essayent de déstabiliser le protocole ou de nuire à d'autres
+validateurs&nbsp; par exemple, dans la preuve de travail, une coalition de 51%
+peut doubler ses revenus en refusant d'inclure les blocs de tous les autres
+mineurs.
 
 Le modèle de la majorité honnête est indiscutablement irréaliste et a
 déjà été réfuté empiriquement&nbsp;: en guise d'exemple pratique, voir le
@@ -464,29 +485,29 @@ manière ou d'une autre. L'hypothèse de la majorité non coordonnée peut
 des nœuds est honnête mais dispose d'un budget, et l'attaquant arrête
 s'il commence à perdre trop d'argent.
 
-Le modèle de Zamfir a été critiqué dans certains cas pour son
+Le modèle de l'attaquant corrupteur a été critiqué dans certains cas pour son
 agressivité irréaliste, bien que ses partisans soutiennent que si un protocole
-est conçu dans l'esprit du modèle de Zamfir, il devrait pouvoir
+est conçu dans l'esprit du modèle de l'attaquant corrupteur, il devrait pouvoir
 réduire massivement le coût du consensus puisque des attaques à 51%
 deviennent des évènements dont on peut réchapper. Nous évaluerons la
 fragmentation aussi bien dans le contexte de la majorité non coordonnée que
-dans celui des modèles de Zamfir.
+dans celui du modèle de l'attaquant corrupteur.
 
-### Comment pouvons-nous résoudre ce trilemme dans un modèle de majorité honnête ou non coordonnée&nbsp;?
+### Comment pouvons-nous parer à l'attaque de prise de contrôle d'un fragment dans un modèle de majorité non coordonnée&nbsp;?
 
 En deux mots, échantillonnage aléatoire. Chaque fragment se voit assigner
-un certain nombre de validateurs (par exemple 150) et le validateur
+un certain nombre de collationneurs (par exemple 150) et le validateur
 qui fait un bloc sur chaque fragment est pris dans l'échantillon de ce
 fragment. Les échantillons peuvent être tirés à nouveau soit
 semi-fréquemment (comme une fois toutes les 12 heures) soit
 extrêmement fréquemment (il n'y a pas de processus d'échantillonnage
-réellement indépendant, les validateurs sont sélectionnés
+réellement indépendant, les collationneurs sont sélectionnés
 aléatoirement pour chaque fragment depuis un _pool_ global à chaque
 bloc).
 
-Il en résulte que même si seuls quelques nœuds vérifient et
+Il en résulte que même alors que seuls quelques nœuds vérifient et
 créent les blocs sur chaque fragment à un instant donné, le niveau de
-sécurité est en fait peu amoindri dans un modèle de
+sécurité n'est en fait pas très amoindri dans un modèle de
 majorité honnête/non coordonnée par rapport à une situation où chaque nœud vérifie et
 crée des blocs. C'est une simple question de statistiques&nbsp;: si l'on
 suppose une supermajorité de ⅔ dans l'ensemble global et si la taille
@@ -514,7 +535,7 @@ Dans le modèle de Zamfir (ou bien dans le modèle de l'«&nbsp;adversaire
 très très adaptatif&nbsp;»), tout n'est pas si simple mais nous y viendrons
 plus tard. Notons qu'en raison des imperfections de l'échantillonnage,
 le seuil de sécurité décroît de ½ à ⅓, mais cette perte de sécurité
-reste très basse pour un gain potentiel de 100 à 1000x en
+reste étonnamment basse pour un gain potentiel de 100 à 1000x en
 passage à l'échelle sans perte de décentralisation.
 
 ### Comment faites vous concrètement cet échantillonnage en preuve de travail, et en preuve d'enjeu&nbsp;?
@@ -558,15 +579,15 @@ prochain bloc. Ils peuvent ensuite dépenser une quantité de travail
 équivalente à O(1) pour créer un bloc sur ce fragment, et la valeur de
 cette solution de preuve de travail détermine sur quel fragment ils
 peuvent travailler ensuite, et ainsi de
-suite<sup>[8](#ftnt_ref8)</sup>. Notons que toutes ces approches
+suite<sup>[7](#ftnt_ref7)</sup>. Notons que toutes ces approches
 rendent la preuve de travail d'une certaine manière «&nbsp;_stateful_&nbsp;»,
-qu'elles impliquent une mémoire de l'état&nbsp;; cette implication est
+qu'elles impliquent une mémoire de l'état&nbsp;; cette nécessité est
 fondamentale.
 
 ### Quels sont les compromis nécessaires pour un échantillonnage plus ou moins fréquent&nbsp;?
 
 La fréquence de sélection dépend simplement de la nature adaptative
-des adversaires auxquels le réseau doit faire face pour rester sûr. Par
+des adversaire auxquels le réseau doit faire face pour rester sûr. Par
 exemple, si l'on croit qu'une attaque adaptative (comme des
 validateurs malhonnêtes qui découvrent qu'ils font partie du même
 échantillon et qui se regroupent en coalition) peut se produire en 6
@@ -582,25 +603,24 @@ fois que les validateurs sont tirés au sort, ceux-ci doivent
 télécharger la totalité de l'état du nouveau fragment dans lequel ils
 se trouvent. Cela demande à la fois une politique de contrôle étroit
 de la taille de l'état (en s'assurant économiquement que la taille de
-l'état ne croîsse pas trop, que ce soit en supprimant les anciens
+l'état ne croît pas trop, que ce soit en supprimant les anciens
 comptes, en restreignant le taux de création de nouveaux comptes ou
 une combinaison des deux) et un temps de tirage au sort assez long pour
 bien fonctionner.
 
 Actuellement, le client Parity peut télécharger et vérifier un _snapshot_,
 un instantané d'état Ethereum complet par «&nbsp;_warp-sync_&nbsp;» en
-~10 minutes&nbsp;; si nous divisons par 5 pour compenser les problèmes
-temporaires en rapport avec les attaques récentes par déni de service
-et multiplions par 20 pour prendre en compte un usage croissant (10 tx/sec au
+\~3 minutes&nbsp;; si nous
+augmentons de 20x pour compenser un usage croissant (10 tx/sec au
 lieu de l'actuel 0,5 tx/sec) (nous supposons que les politiques de
-contrôle de la taille de l'état à venir et la «&nbsp;poussière&nbsp;» due à
+contrôle de la taille de l'état à venir et la «&nbsp;poussière&nbsp;» (*dust*) due à
 l'usage sur le long terme ont tendance à s'annuler), nous obtenons un
-temps de synchronisation de l'état de 40 minutes, ce qui suggère que
+temps de synchronisation de l'état de 60 minutes, ce qui suggère que
 des périodes de 12-24 heures mais pas moins sont sûres.
 
 Il y a deux voies possibles pour affronter ce défi.
 
-### Est-il possible de forcer les utilisateurs à détenir plus d'état pour que les transactions puisssent être validées sans demander aux validateurs de détenir toutes les données d'état&nbsp;?
+### Pouvons-nous forcer à détenir plus d'état côté utilisateur pour que les transactions puissent être validées sans demander aux validateurs de détenir toutes les données d'état&nbsp;?
 
 Ces techniques demandent aux utilisateurs de stocker des données
 d'état et de fournir des preuves de Merkle avec toutes les
@@ -608,7 +628,7 @@ transactions qu'ils envoient. Une transaction serait envoyée avec une
 preuve de Merkle d'exécution correcte et cette preuve permettrait à
 un nœud ne possédant que l'état racine de calculer un nouvel état
 racine. Elle comprend le sous-ensemble des objets du trie qui doivent
-être traverséss pour accéder aux informations que la transaction doit
+être traversés pour accéder aux informations que la transaction doit
 vérifier&nbsp;; comme les preuves de Merkle sont de taille O(log(n)), la
 preuve d'une transaction qui accède à un nombre constant d'objets
 serait également de taille O(log(n)).
@@ -624,9 +644,9 @@ défauts. D'abord, elle introduit une surcharge O(log(n)), bien que
 l'on puisse soutenir que cette dernière ne soit pas si énorme que ce
 qu'il y paraît car elle garantit que le validateur peut se contenter
 de conserver les données d'état en mémoire, donc sans jamais impliquer
-d'accès au disque<sup>[9](#ftnt_ref9)</sup>. Ensuite, elle peut
+d'accéder au disque<sup>[8](#ftnt_ref8)</sup>. Ensuite, elle peut
 facilement être appliquée si les objets d'état auxquels on accède dans
-une transaction sont statiques. C'est en revanche plus difficile
+une transaction sont statiques, ce qui est en revanche plus difficile
 si les objets en question sont dynamiques - c'est-à-dire si
 l'exécution de la transaction comporte du code de la forme
 `read(f(read(x)))` où l'adresse d'une lecture d'état dépend du
@@ -634,7 +654,7 @@ résultat de l'exécution d'une autre lecture d'état. Dans ce cas,
 l'adresse que l'émetteur de la transaction pense que celle-ci va lire
 au moment de l'envoi peut très bien différer de celle qui est en fait
 lue quand la transaction est incluse dans un bloc et la preuve de
-Merkle peut s'avérer insuffisante<sup>[10](#ftnt_ref10)</sup>.
+Merkle peut s'avérer insuffisante<sup>[9](#ftnt_ref9)</sup>.
 
 Un compromis consiste à permettre aux émetteurs de transactions
 d'envoyer une preuve qui incorpore les données auxquelles on aura le
@@ -659,61 +679,16 @@ elles ont le droit d'accéder et qui contiennent les preuves de tout
 l'état de ces contrats. Notons que cela ne s'applique qu'au moment de
 la diffusion initiale de ces contrats&nbsp;; une fois une transaction
 incluse dans un bloc, l'ordre d'exécution est fixé et donc seule la
-preuve de Merkle minimale correspondant à l'état auquel on doit
-réellement accéder peut être fournie.
+preuve de Merkle minimal correspondant à l'état auquel on doit
+réellement accéder peut être fourni.
 
-Si les validateurs ne sont pas immédiatement tirés au sort à nouveau,
-il y a encore une opportunité pour augmenter l'efficience. Les validateurs 
-pourraient stocker les données des preuves de
+Si les validateurs ne sont pas immédiatement tirés à nouveau au sort,
+il y a encore une opportunité d'augmenter l'efficience. Nous pouvons
+attendre des validateurs qu'ils stockent les données des preuves de
 transactions qui ont déjà été traitées, afin que ces données n'aient
 pas à être renvoyées&nbsp;; si k transactions sont envoyées pendant une
 période de tirage au sort, cela abaisse e la taille moyenne d'une preuve
 de Merkle de log(n) à log(n) - log(k).
-
-### J'entends parler de séparer la vérification de la disponibilité des données et du calcul de l'état, ce qui pourrait résoudre ce problème. Comment cela fonctionne-t-il&nbsp;?
-
-Une blockchain peut être vue comme un système crypto-économique qui
-incite les validateurs à faire des affirmations économiques sur
-certains faits afin d'arriver à un consensus et de permettre aux
-utilisateurs de déterminer efficacement des informations sur l'état du
-système. Ces affirmations peuvent être décomposées en plusieurs
-catégories&nbsp;:
-
-- **Disponibilité des données**&nbsp;: un en-tête de bloc contenant une
-    racine de Merkle d'un abre de transactions affirme en fait «&nbsp;je
-    crois que les données vers lesquelles pointe cet arbre de Merkle est
-    actuellement accessible par tout bloc sur le réseau&nbsp;;
-- **Ordre**&nbsp;: une chaîne d'en-têtes de blocs affirme en fait «&nbsp;je
-    crois que ces données sont en gros arrivées dans cet ordre&nbsp;»&nbsp;;
-- **Calcul de l'état**&nbsp;: un en-tête de bloc contenant une racine
-    d'état affirme en fait «&nbsp;je crois que l'historique des transactions
-    référencées par cette empreinte mène à un état dont l'empreinte
-    racine est X&nbsp;».
-
-Les blockchains actuelles amalgament massivement ces trois
-catégories. Notons en particulier que, même dans les systèmes qui
-n'ont pas de notion d'arbre d'état de Merkle, le calcul de l'état et
-la disponibilité des données sont confondus car ces systèmes ont
-une notion de «&nbsp;transaction valide&nbsp;» où la validité dépend de l'état -
-par exemple une transaction ne peut être valide que si, dans l'état
-courant, le compte de l'expéditeur détient les fonds nécessaires pour
-l'honorer. Cet amalgame est d'une certaine manière commode mais réduit
-aussi fortement le spectre des concepts possibles de blockchains.
-
-On peut imaginer un concept qui sépare ces trois composantes, ou du
-moins qui sépare le calcul de l'état des deux autres parties. Cela
-peut être accompli par un système où les fragments n'incluent PAS les
-racines d'état par défaut et où il n'y a pas de règle de «&nbsp;validité&nbsp;»
-de transaction hormis les vérifications formelles de base&nbsp;; une
-transaction qui aurait été considérée comme «&nbsp;invalide&nbsp;» auparavant
-serait maintenant considérée simplement ineffective. Le tirage au sort
-pourrait se produire à chaque bloc sans se soucier de la récupération
-de l'état, car les validateurs n'auraient pas à faire de calcul de
-l'état pour include des blocs. Un processus à part calculerait alors
-l'état de tous les fragments&nbsp;; ce processus pourrait être beaucoup
-plus robuste puisqu'il pourrait postuler que les données sur lesquelles il
-opère sont totalement disponibles (vous verrons dans les sections
-suivantes pourquoi c'est tellement important).
 
 ### Comment l'aléa de l'échantillonnage aléatoire est-il généré&nbsp;?
 
@@ -751,7 +726,7 @@ pour diverses valeurs de N et de p&nbsp;:
 
 Donc, pour N >= 150, la probabilité qu'une graine d'aléa donnée mène à
 un échantillon favorisant l'attaquant est vraiment très
-petite<sup>[11](#ftnt_ref11),[12](#ftnt_ref12)</sup>. Du
+petite<sup>[10](#ftnt_ref10),[1³](#ftnt_ref1³)</sup>. Du
 point de vue de la sécurité de l'aléa, cela signifie que l'attaquant doit avoir
 une liberté maximale dans le choix de l'ordre des valeurs aléatoires
 pour casser complètement le processus d'échantillonnage. La plupart
@@ -784,25 +759,25 @@ le maximum attendu de N échantillons aléatoires se trouve légèrement sous M
 + S \* sqrt(2 \* log(N)) où M est la moyenne et S est la déviation
 standard. La récompense issue de la manipulation de l'aléa et du rejeu
 des dés (c'est-à-dire l'accroissement de N) chute brutalement. Par
-exemple avec 0 tenative la récompense espérée est de 100$, avec 1
-tentative elle est de 105,5$, avec deux elle est de 108,5$, avec trois
+exemple avec 0 réessais la récompense espérée est de 100$, avec 1
+réessai elle est de 105,5$, avec deux elle est de 108,5$, avec trois
 elle est de 110,3$, avec quatre elle est de 111,6$, avec cinq elle est
-de 112,6$ et avec six de 113,5$. Donc, après cinq tenatives, ce n'est
+de 112,6$ et avec six de 113,5$. Donc, après cinq réessais, ce n'est
 plus intéressant. Il en résulte qu'un attaquant économiquement motivé
 avec dix pour cent des mises dépensera (avec un coût social) 5$ pour
 un gain supplémentaire de 13$, pour un bénéfice net de 8$.
 
-Cependant, ce genre de raisonnement supppose qu'une seule relance de dés
-soit coûteuse. De nombreux algorithmes de preuve d'enjeu anciens ont
+Cependant, ce genre de raisonnement suppose qu'un seul rejeu des dés
+soit coûteux. De nombreux anciens algorithmes de preuve d'enjeu ont
 une vulnérabilité de _stake grinding_ où relancer les dés signifie
 simplement effectuer un calcul sur son ordinateur&nbsp;; les algorithmes
 comportant cette vulnérabilité sont bien sûr inacceptables
 dans un contexte de fragmentation. Les nouveaux algorithmes (voir la
 section sur la sélection des validateurs dans la [FAQ de la preuve
 d'enjeu](https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ))
-font en sorte que la nouvelle tentative implique d'abandonner sa place dans le
+font en sorte que le rejeu implique d'abandonner sa place dans le
 processus de création de bloc, avec les récompenses et les frais
-associés. La mailleure manière d'atténuer l'impact d'attaques marginales
+associés. La meilleure manière d'atténuer l'impact d'attaques marginales
 économiquement motivées sur la sélection des échantillons
 consiste à trouver le moyen d'augmenter ce coût. On peut l'augmenter
 d'un facteur de sqrt(N) depuis N tours de vote par la [méthode des
@@ -819,8 +794,8 @@ graine d'aléa servant à sélectionner les échantillons. Ces signatures
 ont comme propriété de garantir qu'une valeur reste la même, peu
 importe qui d'un ensemble de participant fournit des données à
 l'algorithme, pourvu qu'au moins ⅔ des participants soient
-honnêtes. Cette approche est plus clairement inexploitable
-économiquement, et totalement résistante à toutes les formes de _stake
+honnêtes. Cette approche est plus évidemment inexploitable
+économiquement, et totalement résistant à toutes les formes de _stake
 grinding_, mais elle comporte plusieurs faiblesses&nbsp;:
 
 - **Elle dépend d'une cryptographie complexe** (en particulier les
@@ -847,219 +822,56 @@ contextes favorisant la disponibilité.
 
 ### Quels sont les préoccupations en rapport avec la fragmentation par échantillonnage aléatoire dans un modèle de Zamfir&nbsp;?
 
-Dans un modèle de Zamfir, le fait que les validateurs sont
+Dans le modèle de l'attaquant corrupteur ou celui du choix coordonné, 
+le fait que les validateurs sont
 échantillonnés aléatoirement n'a pas d'importance&nbsp;: quel que soit
 l'échantillon, soit l'attaquant peut corrompre la grande majorité de
 l'échantillon pour faire ce qui lui plaît, soit il contrôle
 directement une majorité de l'échantillon et peut le diriger pour
 effectuer des actions à bas coût (O(c), pour être précis).
 
-Parvenu à ce point, l'attaquant peut conduire des attaques à 51% contre cet
+À ce point, l'attaquant peut conduire des attaques à 51% contre cet
 échantillon. La menace est aggravée par le risque de
 contagion inter-fragment&nbsp;: si l'attaquant corrompt l'état d'un
 fragment, il peut alors commencer à envoyer des quantités illimitées
 de fonds vers d'autres fragments, entre autres forfaits. L'un dans
-l'autre, la sécurité du modèle de Zamfir n'est pas meilleure que celle
+l'autre, la sécurité des modèles de l'attaquant corrupteur et du
+choix coordonné n'est pas meilleure que celle
 de la création de O(c) altcoins.
 
-### Comment améliorer la situation&nbsp;?
+### Comment pouvons-nous améliorer la situation&nbsp;?
 
-L'un des mécanismes sur lesquels il est possible de s'appuyer est
-l'existence de fragments extérieurs auxquels des des preuves sont soumises. 
-En cas d'attaque à 51% contre une chaîne rendant les
-données la concernant indisponibles, il est possible de  mettre en place
-des mécanismes de défi-réponse où des utilisateurs (parfois appelés «
-pêcheurs&nbsp;»<sup>[13](#ftnt_ref13)</sup> peuvent lancer des défis
-affirmant que certaines données sont indisponibles et, jusqu'à ce que
-des réponses soient publiées, les utilisateurs sauraient qu'il ne faut
-pas faire confiance à cette chaîne. Nous pouvons également essayer de
-détecter les situations où une chaîne est «&nbsp;attaquée&nbsp;» et faire en
-sorte qu'un mécanisme «&nbsp;gestionnaire&nbsp;» global monte brutalement les
-récompenses et les pénalités afin que que la poursuite de l'attaque
-devienne de plus en plus coûteuse. On peut également créer des mécanismes
-où l'un d'entre eux joue le rôle de point de contrôle sur l'accord
-sur l'état du fragment, en empêchant ce fragment de régresser jusqu'à
-un point antérieur à ce point de contrôle (le mécanisme de
-fragmentation du Mauve Paper y parvient par son système de pari de
-finalité).
+Essentiellement en résolvant le problème de la détection de fraude.
 
-Les mécanismes de défi-réponse se fondent généralement sur un principe
-d'escalade&nbsp;: le fait X est inialement accepté comme vrai si au moins k
-validateurs signent une déclaratin (confirmée par un dépôt) en ce
-sens.  Cependant, si cela se produit, il y a une période de défi
-pendant laquelle 2k validateurs peuvent signer une déclaration selon
-laquelle elle est fausse. Dans ce cas, 4k validateurs peuvent signer
-une déclaration selon laquelle elle est en fait fausse, et ainsi de
-suite jusqu'à ce qu'un des côtés abandonne ou que la plupart des
-validateurs aient signé des déclarations, à quel point chaque
-validateur vérifie par lui-même si X est vrai ou faux. Si X est jugé
-vrai, chacun ayant déclaré en ce sens est récompensé et chacun ayant
-déclaré en l'autre sens est pénalisé, et vice versa. Les acteurs
-malveillants perdent donc un montant proportionnel au nombre d'acteurs
+Une des principales catégories de solution à ce problème est l'utilisation de
+mécanismes de défi-réponse.  Les mécanismes de défi-réponse se fondent
+généralement sur un principe d'escalade&nbsp;: le fait X (c'est-à-dire
+«&nbsp;la collation n°&nbsp;17293 du fragment n°&nbsp;54 est valide&nbsp;») est
+initialement accepté comme vrai si au moins k validateurs signent une déclaration
+(confirmée par un dépôt) en ce sens.  Cependant, si cela se produit, il y a une
+période de défi pendant laquelle 2k validateurs peuvent signer une déclaration
+selon laquelle elle est fausse. Dans ce cas, 4k validateurs peuvent signer une
+déclaration selon laquelle elle est en fait fausse, et ainsi de suite jusqu'à
+ce qu'un des côtés abandonne ou que la plupart des validateurs aient signé des
+déclarations, à quel point chaque validateur vérifie par lui-même si X est vrai
+ou faux. Si X est jugé vrai, chacun ayant déclaré en ce sens est récompensé et
+chacun ayant déclaré en l'autre sens est pénalisé, et vice versa. 
+
+Avec ce mécanisme, on peut prouver que les acteurs
+malveillants perdent un montant proportionnel au nombre d'acteurs
 qu'ils ont forcé à vérifier la véracité de X&nbsp;; cela empêche d'utiliser
 le système comme un vecteur de déni de service. Ce système peut être
 implémenté d'une manière ainsi structurée, ou bien sous une forme plus
 libre par un marché de prédiction. Le système de finalité du Mauve
 Paper s'oriente vers cette dernière solution. 
 
-Cette approche fonctionne très bien
-si nous l'utilisons pour la validation d'état et que la disponibilité des
-données est supposée déjà résolue, de manière que la malfaisance puisse
-toujours être prouvée. Une faiblesse majeure apparaît néanmoins quand
-on veut l'utiliser pour vérifier la disponibilité des données
-elle-même&nbsp;: alors que celle-ci peut être prouvée, si nécessaire en
-fournissant simplement les données, l'indisponibilité des données à
-l'instant X ne peut jamais être prouvée aux validateurs qui ne peuvent
-effectuer de vérifications qu'après l'instant X. Si le système
-ci-dessus est appliqué directement, des acteurs malveillants peuvent
-publier un bloc contenant des données non disponibles, puis commencer
-l'escalade du jeu de défi-réponse, et enfin publier soudainement les
-données, rendant de ce fait ridicules tous ceux qui avaient
-auparavant déclaré (à raison) que les données étaient
-indisponibles. La mise au défi représente donc une activité
-potentiellement altruiste et les attaquant pourraient bien «
-déshabiller&nbsp;» les contradicteurs par des fausses alarmes jusqu'au
-point où plus personne ne voudrait lancer de défi, ce qui serait le moment
-attendu pour l'attaque réelle.
+### Quel est le problème de la disponibilité des données, et comment pouvons-nous utiliser les codes à effacement pour le résoudre ?
 
-### Et si tous les validateurs vérifiaient la disponibilité des données pour tous les en-têtes de blocs en échantillonnant au hasard quelques données&nbsp;?
+Voir https://github.com/ethereum/research/wiki/A-note-on-data-availability-and-erasure-coding
 
-Alors les attaques où une seule donnée manque sur un million
-pourraient passer à travers presque toutes les vérifications des
-validateurs avec une très forte probabilité.
+### Cela signifie-t-il que nous pouvons créer des blockchains fragmentées susceptibles de passer à l'échelle où le coût d'une malveillance est proportionnelle à la taille de tout l'ensemble des validateurs&nbsp;?
 
-### Exiger que les données passent par un code à effacement avec un zk-SNARK pour le prouver&nbsp;?
-
-Là, ça devient sérieux. Il s'agit cependant d'une approche
-cryptographiquement très complexe, en particulier parce que les
-calculs des transformées de Fourier rapides impliquées dans les codes
-à effacement efficaces sont lourds et que ceux nécessaires aux
-zk-SNARK le sont encore plus, et, au bout du compte, au lieu de viser
-un objectif de n = O(c\^2), nous viserons n = O(c\^2 /log\^3(c)) et,
-surtout si nous voulons également des temps de bloc rapide, il est
-difficile de dire si, après toute cette surcharge, il restera de vrais
-gains en performances.
-
-### Revenons un peu en arrière. Avons-nous réellement besoin de cette complexité si nous avons un tirage instantané&nbsp;? Dans ce cas, cela ne signifie-t-il pas que chaque fragment tire directement les validateurs du _pool_ global de validateurs et qu'il se comporte comme une blockchain, et donc que la fragmentation n'introduit pas de nouvelle complexité ?
-
-En quelque sorte. Tout d'abord, il faut noter que la preuve de travail
-et la preuve d'enjeu simple, même sans fragmentation, ont toutes les
-deux une sécurité très faible dans un modèle de Zamfir&nbsp;; un bloc n'est
-vraiment «&nbsp;finalisé&nbsp;» dans le sens zamfirien qu'après un temps O(n)
-(si seulement quelques blocs ont été validés, alors le coût économique de
-remplacement de la chaîne est simplement le coût de démarrage d'une
-double dépense à partir d'avant le bloc en
-question). Casper résoud ce problème en ajoutant son mécanisme de
-finalité afin que la marge de sécurité économique augmente
-exponentiellement plutôt que linéairement. Les validateurs acceptent
-de miser de manière exponentielle parce qu'ils (i) voient que d'autres
-validateurs misent, et (ii) ont vérifié personnellement toutes les
-transitions d'état et peuvent donc conclure qu'il n'y a aucune chance
-pour qu'ils signent une chaîne invalide. Dans une chaîne fragmentée,
-si nous voulons une finalité économique, nous devons élaborer une
-chaîne de raisonnement expliquant pourquoi un validateur pourrait
-désirer faire une déclaration forte sur une chaîne en se fondant
-uniquement sur un échantillon aléatoire, alors que le validateur
-lui-même est convaincu que le modèle de Zamfir est exact et que
-l'échantillon aléatoire est potentiellement corrompu.
-
-### Comment utiliser des facteurs douloureux (_griefing factors_) pour analyser ceci&nbsp;?
-
-L'un des approches possibles consiste à créer un protocole et à
-présenter une stratégie selon ce protocole qui atteint la finalité,
-montrer comment dans des conditions normales cette stratégie maximise
-les profits, et puis aussi montrer que la stratégie a un facteur
-douloureux limité. Un facteur douloureux peut être grossièrement
-défini comme suit&nbsp;: l'acteur A sous le protocole P avec la stratégie
-S a un facteur douloureux x si des acteurs malveillants acceptant de
-dépenser k$ peuvent faire perdre k$ \* x à A. On note que les facteurs
-douloureux sont souvent dépendants de la situation et peuvent
-dépendre de x ainsi que d'autres facteurs comme la partie de
-l'ensemble des validateurs que contrôle l'attaquant, mais il serait
-bien de montrer une limite supérieure sur le facteur douloureux dans
-un protocole donné avec une stratégie donnée dans n'importe quelle
-situation.
-
-Dans un Casper non fragmenté, on peut créer ce genre de preuve, du
-moins dans le cas d'une double dépense contre une chaîne où la «&nbsp;ruée
-exponentielle vers la finalité économique&nbsp;» a déjà commencé. En voici
-un schéma. D'après les règles du protocoles, pour qu'une nouvelle
-chaîne atteigne le même degré de finalité qu'une chaîne existante
-(afin que les nœuds ne faisant pas partie de la collusion s'y
-rallient), il doit y avoir au moins ⅔ des validateurs sur la nouvelle
-chaîne. Il doit également y avoir au moins ⅔ des validateurs sur
-l'ancienne chaîne et donc au moins ⅓ des validateurs doivent se
-trouver sur les deux chaînes (ils sont par définition malveillants)&nbsp;;
-nous appellerons cette fraction ⅓ + p. Pour que la nouvelle chaîne
-démarre, au moins ⅔ des validateurs doivent s'y trouver et ces ⅔
-doivent également être malveillants. Donc, quand l'ancienne chaîne est
-rejetée, nous pouvons nous attendre à ce qu'elle contienne ⅓ + p de
-validateurs malveillants et au plus ⅓ de validateurs honnêtes (puisque
-l'attaque requiert ⅔ de validateurs malveillants pour être
-lancée). Nous avons donc établi qu'il y a au moins autant de
-validateurs malveillants que de validateurs honnêtes sur l'ancienne
-chaîne.
-
-En raison du mécanisme des mises de la part des validateurs d'après
-les tailles des mises existantes, nous pouvons limiter les pertes des
-validateurs honnêtes à 1,5x les pertes des attaquants&nbsp;; donc le
-facteur douloureux est 1,5. Si nous augmentons le seuil de
-finalisation de ⅔ à ¾, cette valeur peut être réduite à 0,67.
-
-Dans le cas d'une vérification de disponibilité de données
-fragmentées, ce n'est pas si facile. La raison en est qu'il est prévu
-que la majorité des validateurs fondent leur opinion en faisant
-confiance à un petit échantillon, et l'attaquant n'aurait besoin que
-d'un petit budget pour faire mentir ce petit échantillon et tromper
-ainsi les autres validateurs qui feraient des mises leur occasionnant
-de grandes pertes. L'argument de l'accélération lente exponentielle ne
-s'y applique pas car les validateurs honnêtes se disent qu'à partir
-d'un certain point sur la courbe, les autres validateurs ne regardent
-pas les données elles-mêmes mais uniquement ce qu'ont fait les autres
-validateurs.
-
-Remarquons que cet argument s'applique tant au modèle de Zamfir qu'au
-modèle de l'«&nbsp;adversaire très très adaptatif&nbsp;» (c'est-à-dire qu'un
-adversaire peut immédiatement hacker des ordinateurs mais il est
-limité en nombre d'ordinateurs qu'il peut hacker).
-
-### Pouvons-nous utiliser une hypothèse de minorité honnête pour contourner cela&nbsp;?
-
-C'est en effet très probable. Nous pouvons avoir un protocole où les
-validateurs ne commencent le processus d'accélération exponentielle
-que si la «&nbsp;qualité de la chaîne&nbsp;» (c'est-à-dire la proportion des
-blocs dans la chaîne principale divisés par le nombre total de blocs
-en cours de production) est plus grand que ⅞. Si la qualité de la
-chaîne est moindre que ⅞ sur une longue période de temps, alors les
-récompenses et les pénalités sur cette chaîne sont augmentées (une
-condition de budget équilibré est satisfaite puisque les récompenses
-accrues proviennent des pénalités également accrues), jusqu'au point
-où chaque bloc sur la chaîne malfaisante draine tous les capitaux de
-l'attaquant, qui voit ainsi disparaître l'intégralité de son dépôt
-dans un temps O(n). On remarque qu'il s'agit d'une adaptation du
-[consensus de Sztorc]
-(http://www.truthcoin.info/papers/truthcoin-whitepaper.pdf), qui
-fonctionne aussi en ne faisant «&nbsp;monter les enchères&nbsp;» qu'en cas de
-grande contestation.
-
-Il reste encore de nombreux détails à régler pour trouver la manière
-optimale d'implémenter ces types de protocoles et de fournir des
-garanties à leur sujet mais cette approche générale semble très
-prometteuse.
-
-### Mais cela ne veut-il pas dire qu'un attaquant peut toujours dépenser un petit montant pour qu'un seul fragment fonctionne très mal pendant un certain temps&nbsp;?
-
-Si.
-
-### Donc nous n'avons pas vraiment résolu le trilemme, mais nous l'avons esquivé en lâchant un peu de lest au niveau du modèle de sécurité&nbsp;?
-
-En quelque sorte. Notons que les attaquants peuvent réduire la «
-qualité de chaîne&nbsp;» d'un fragment, mais ils peuvent toujours pas
-finaliser un mauvais état avec un capital inférieur à O(n).
-
-### Mais c'est affreux !
-
-Pas vraiment. Il existe une attaque triviale par laquelle un attaquant
+Il existe une attaque triviale par laquelle un attaquant
 peut toujours brûler un capital de O(c) pour réduire temporairement la
 qualité d'un fragment&nbsp;: il le spamme en envoyant des transactions avec
 des frais très importants, forçant ainsi les utilisateurs légitimes à
@@ -1074,6 +886,24 @@ honnête/non coordonnée) est évidemment bien pire que l'attaque par
 spam de transactions. Nous savons donc que nous avons atteint la
 limite connue pour la sécurité d'un fragment donné et il ne sert à
 rien d'aller plus loin.
+
+### Revenons un peu en arrière. Avons-nous réellement besoin de cette complexité si nous avons un tirage instantané ? Dans ce cas, cela ne signifie-t-il pas que chaque fragment tire directement les validateurs du _pool_ global de validateurs et qu'il se comporte comme une blockchain, et donc que la fragmentation n'introduit pas de nouvelle complexité ?
+
+En quelque sorte. Tout d'abord, il faut noter que la preuve de travail et la
+preuve d'enjeu simple, même sans fragmentation, ont toutes les deux une
+sécurité très faible dans un modèle de Zamfir&nbsp;; un bloc n'est vraiment
+«&nbsp;finalisé&nbsp;» dans le sens zamfirien qu'après un temps O(n) (si
+seulement quelques blocs ont passé, alors le coût économique de remplacement de
+la chaîne est simplement le coût de démarrage d'une double dépense à partir
+d'avant le bloc en question). Casper résout ce problème en ajoutant son
+mécanisme de finalité afin que la marge de sécurité économique augmente
+immédiatement vers le maximum. Dans une chaîne fragmentée, si nous voulons la
+finalité économique, alors nous devons concevoir une chaîne de raisonnement
+telle qu'un validateur puisse en venir à faire une déclaration très forte sur
+une chaîne en se fondant uniquement sur un échantillon quelconque, quand le
+validateur lui-même est convaincu que les modèles de l'attaquant corrupteur et
+du choix coordonné peuvent être corrects et donc que l'échantillon en question
+pourrait être corrompu.
 
 ### Vous avez parlé de fragmentation transparente. J'ai 12 ans, qu'est-ce que c'est&nbsp;?
 
@@ -1133,7 +963,7 @@ comme suit&nbsp;:
 Un client sur le fragment X, s'il voit une transaction sur les
 fragments (X, Y), demande une preuve de Merkle au fragment Y vérifiant
 (i) la présence de cette transaction sur le fragment Y, et (ii) quel
-est le pré-état sur le fragment U pour ces bits de données auquels la
+est le pré-état sur le fragment U pour ces bits de données auxquels la
 transaction devra accéder. Elle exécute alors la transaction et
 s'engage sur le résultat de l'exécution. Remarquons que ce processus
 peut être très inefficace s'il y a de nombreuses transactions avec des
@@ -1200,7 +1030,7 @@ cas pour plusieurs raisons&nbsp;:
   applications devraient mettre en place des **marges de sécurité
   d'une taille rédhibitoire**.
 
-On pourrait essayer de concevoir un système où les messages asychrones
+On pourrait essayer de concevoir un système où les messages asynchrones
 provenant d'un fragment déclenchent automatiquement des effets dans
 leur fragment de destination après un certain nombre de
 blocs. Cependant, cela demande que chaque client sur chaque fragment
@@ -1221,10 +1051,10 @@ en incitant fortement à un comportement correct. 
 
 Correct&nbsp;; c'est un vrai problème. Voici une proposition de
 solution. Afin de lancer un appel inter-fragments du fragment A au
-fragment B, l'appelant doit d'abord acheter du «&nbsp;gaz B congelé&nbsp;» 
-(par une transaction dans le fragment B, enregistré
+fragment B, l'appelant doit d'abord acheter du «&nbsp;gaz B congelé&nbsp;» (ce
+qui est fait par une transaction dans le fragment B, et enregistré
 dans le fragment B).  Le gaz congelé du fragment B a un taux de
-demeurage (coût de possession) rapide&nbsp;: une fois commandé, il perd 1/k de sa valeur à
+demeurage rapide&nbsp;: une fois commandé, il perd 1/k de sa valeur à
 chaque bloc. Une transaction sur le fragment A peut alors envoyer le
 gaz B congelé avec le reçu qu'il crée, et il peut être gratuitement
 utilisé sur le fragment B. Les blocs du fragment B allouent un espace
@@ -1233,7 +1063,7 @@ qu'en raison des règles de demeurage, il ne peut y avoir au plus que
 pour GAS\_LIMIT \* k de gaz congelé disponible pour un fragment donné
 à tout moment, qui peut être certainement rempli pendant k locs (en
 fait, encore plus vite en raison du demeurage, mais nous avons besoin
-de cet espace libre en raison des validateurs malveillants).  Dans le cas 
+de cet espace libre en raison des validateurs malveillants).  Au cas
 où trop de validateurs échouent de manière malveillante à inclure les
 reçus, nous pouvons rendre les pénalités plus justes en exemptant les
 validateurs qui remplissent l'«&nbsp;espace de reçus&nbsp;» de leurs blocs avec
@@ -1244,10 +1074,10 @@ une opération inter-fragments doit d'abord acheter à l'avance du gaz
 pour tous les fragments nécessaires à l'opération, en prévoyant une
 marge pour le demeurage. Si l'opération crée un reçu qui déclenche une
 opération consommant 100000 gaz dans le fragment B, l'utilisateur
-achète 100000 \* e (ie. 271818) de gaz congelé du fragment B. Si cette
+achète 100000 \* e (c.à.d. 271818) de gaz congelé du fragment B. Si cette
 opération consomme à son tour 100000 gaz dans le fragment C (avec deux
 niveaux d'indirection), l'utilisateur doit pré-acheter 100000 \* e\^2
-(ie. 738906) de gaz congelé du fragment C. Remarquons que, une fois
+(c.à.d. 738906) de gaz congelé du fragment C. Remarquons que, une fois
 les achats confirmés, quand l'utilisateur commence l'opération
 principale, celui-ci peut être sûr qu'il sera isolé des variations du
 marché du gaz, à moins que des validateurs ne perdent volontairement
@@ -1276,7 +1106,7 @@ pas le faire facilement.
 
 ### Les blockchains fragmentées permettraient-elle de mieux gérer les partitions réseau&nbsp;?
 
-Les systèmes décrits dans ce document n'offiraient aucune amélioration
+Les systèmes décrits dans ce document n'offriraient aucune amélioration
 par rapport aux blockchains non fragmentées&nbsp;; soyons réalistes, tous
 les fragments finiraient avec des nœuds de chaque côté de la
 partition. Il y a eu des appels (par exemple de [Juan Benet de
@@ -1284,10 +1114,10 @@ IPFS](https://www.youtube.com/watch?v=cU-n_m-snxQ)) à concevoir des
 réseaux capables de passer à l'échelle, dont la caractéristique
 spécifique est de pourvoir être éclatés en fragments à la demande et
 donc de pouvoir continuer à fonctionner autant que possible dans des
-conditions de partitionnement réseau, mais leur fonctionnement 
+conditions de partitionnement réseau, mais leur fonctionnement correct
 comporte des défis crypto-économiques qui ne sont pas triviaux.
 
-L'un des défis majeurs est que si nous voulons une fragmentation fondée
+L'un des principaux défis est que, si nous voulons une fragmentation fondée
 sur la localisation géographique afin que les partitions géographiques
 de réseau n'empêchent que peu la cohésion intra-fragment (avec l'effet
 secondaire d'avoir des latences intra-fragment très faibles et donc
@@ -1296,8 +1126,8 @@ disposer du moyen de choisir les fragments auxquels ils
 participent. C'est dangereux car cela permet des classes d'attaques
 bien plus importantes dans le modèle de la majorité honnête/non
 coordonnée, et donc des attaques très peu coûteuses dans le modèle de
-Zamfir. La fragmentation pour l'efficience de la partition géographique
-et la fragmentation pour la sécurité par échantillonnage aléatoire 
+Zamfir. La fragmentation pour la sécurité de la partition géographique
+et la fragmentation par échantillonnage aléatoire pour l'efficience
 sont deux choses radicalement différentes.
 
 Ensuite, il faudrait une réflexion plus approfondie sur la manière
@@ -1318,20 +1148,20 @@ des temps de bloc ultra-rapides et des frais de transaction moins
 pourraient même être utilisés pour la publication de données et le
 passage de messages.
 
-### Quels sont les défis spécifiques à relever pour passer à l'échelle au-delà de n = O(c\^2)&nbsp;?
+### Quels sont les défis spécifiques au passage à l'échelle au-delà de n = O(c\^2)&nbsp;?
 
 Il faut prendre en compte plusieurs considérations. D'abord,
-l'algorithme devrait être modifié d'un algorithme à deux couches à un
-algorithe empilable à n couches&nbsp;; c'est possible mais
+l'algorithme devrait être converti d'un algorithme à deux couches à un
+algorithme empilable à n couches&nbsp;; c'est possible mais
 complexe. Ensuite, n / c (le rapport entre la charge de calcul totale
 du réseau et la capacité d'un nœud) est une valeur qui se trouve
 proche de deux constantes&nbsp;: d'abord, quand on mesure en blocs, un laps
 de temps de plusieurs heures, ce qui est un «&nbsp;temps de confirmation de
 sécurité maximum&nbsp;» acceptable, et ensuite, le rapport entre les
 récompenses et les dépôts (un premier calcul suggère un dépôt de 32
-ETH et une récompense de bloc de 0,05 ETH pour Casper). Cette dernière
+ETH et une récompense de bloc de 0,05 ETH pour Casper. Cette dernière
 a pour conséquence que si les récompenses et les pénalités sur un
-fragment remontent au niveau des dépôts des validateurs, le
+fragment sont escaladées à l'échelle des dépôts des validateurs, le
 coût de continuation de l'attaque sur un fragment sera de taille O(n).
 
 Au-dessus de c\^2, cela impliquerait probablement un affaiblissement
@@ -1341,7 +1171,7 @@ certaines façons sur de longues périodes pour un coût modéré, bien
 qu'il serait toujours possible d'empêcher un état invalide d'être
 finalisé et d'empêcher un état finalisé d'être annulé à moins que les
 attaquants ne veuillent payer un coût de O(n). Cependant, les
-avantages sont énormes. Une blockchain fragmentée
+récompenses sont grandes. Une blockchain fragmentée
 super-quadratiquement pourrait être utilisée comme un outil générique
 pour presque toutes les applications décentralisées et pourrait
 soutenir des frais de transactions qui rendraient son emploi presque
@@ -1359,9 +1189,9 @@ document.
 
 3. <a name="ftnt_ref3"></a> On a ici quelques raisons d'être
 conservateur. En particulier, notons que si un attaquant lance des
-transactions nocives dont le rapport entre le temps de traitement et
+transactions nocives dont le rapport entre le temps de traitemen et
 les dépenses en espace de bloc (octets, gaz, etc.) est beaucoup plus
-élevé que d'habitude, alors le système aura de très mauvaises
+haut que d'habitude, alors le système sera victime de très mauvaises
 performances et un facteur de sécurité s'avère nécessaire pour prendre
 en compte cette possibilité. Dans les blockchains traditionnelles, le
 fait que le traitement des blocs ne prenne que \~1-5% du temps de bloc
@@ -1380,7 +1210,7 @@ reste présent.
 
 4. <a name="ftnt_ref4"></a> Une autre raison d'être prudent est qu'une
 plus grande taille d'état correspond à un débit réduit, puisque il
-sera de plus en plus difficile pour les nœuds deconserver les données
+sera de plus en plus difficile pour les nœuds de conserver les données
 d'état en RAM. Ils auront de plus en plus besoin d'accès aux disques
 et les bases de données, qui ont souvent un temps d'accès de
 O(log(n)), seront de plus en plus lentes en accès. C'est une leçon
@@ -1397,30 +1227,28 @@ plus loin, chaque fragment possède son propre état et pour chaque
 fragment il existe un mécanisme d'engagement (_commit_) sur la racine
 d'état de ce fragment, qui représente l'état du fragment.
 
-6. <a name="ftnt_ref6"></a> \#MEGA
-
-7. <a name="ftnt_ref7"></a> Si une blockchain classique devient
+6. <a name="ftnt_ref6"></a> Si une blockchain classique devient
 susceptible de passer à l'échelle, la recommandation de l'auteur quant
 au chemin de migration est que la chaîne de l'ancien état doit
 simplement devenir un fragment de la nouvelle chaîne.
 
-8. <a name="ftnt_ref8"></a> Pour que ce soit sûr, quelques autres
+7. <a name="ftnt_ref7"></a> Pour que ce soit sûr, quelques autres
 conditions doivent être satisfaites&nbsp;; en particulier, la preuve de
 travail ne peut être externalisable afin d'empêcher l'attaquant de
 déterminer quelles <i>autres identités de mineurs</i> sont disponibles
 pour un fragment donné afin de miner au-dessus de celles-ci.
 
-9. <a name="ftnt_ref9"></a> Les récentes attaques par déni de service
+8. <a name="ftnt_ref8"></a> Les récentes attaques par déni de service
 sur Ethereum ont prouvé que l'accès au disque dur est un goulet
 d'étranglement crucial pour le passage à l'échelle d'une blockchain.
 
-10. <a name="ftnt_ref10"></a> On peut se demander&nbsp;: eh bien pourquoi
+9. <a name="ftnt_ref9"></a> Vous pouvez demander&nbsp;: eh bien pourquoi
 les validateurs ne récupèrent-ils pas les preuves de Merkle au fil de
 l'eau&nbsp;? Réponse&nbsp;: Parce que c'est une étape de \~100-1000 ms, et
 l'exécution de l'intégralité d'une transaction complexe pendant ce
 laps de temps peut être prohibitive.
 
-11. <a name="ftnt_ref11"></a>  Une solution hybride qui combine
+10. <a name="ftnt_ref10"></a>  Une solution hybride qui combine
 l'efficience habituelle des petits échantillons avec la robustesse
 accrue d'échantillons plus grands est un système d'échantillonnage
 multicouches&nbsp;: avec un consensus entre 50 nœuds qui demande un
@@ -1430,7 +1258,7 @@ avec un seuil de 80% n'a qu'un taux d'échec de 8,92 \* 10-9 même
 contre des attaquants avec p = 0,4, donc la sécurité n'est pas mise à
 mal dans un modèle de majorité honnête ou non coordonnée.
 
-12. <a name="ftnt_ref12"></a> Les probabilités données sont pour un
+11. <a name="ftnt_ref11"></a> Les probabilités données sont pour un
 fragment unique&nbsp;; cependant, la graine d'aléa affecte O(c) fragments
 et l'attaquant pourrait potentiellement prendre le contrôle de l'un
 quelconque d'entre eux. Si nous voulons examiner simultanément O(c)
@@ -1446,10 +1274,6 @@ dans une attaque par manipulation motivée par le profit est
 d'augmenter sa participation à tous les fragments dans tous les cas et
 donc c'est le problème que nous étudions déjà.
 
-13. <a name="ftnt_ref13"></a> Voir l'[article sur Polkadot
-d'Ethercore](https://github.com/polkadot-io/polkadotpaper/raw/master/PolkaDotPaper.pdf) 
-pour une description approfondie du fonctionnement de leur concept de
-«&nbsp;pêcheur&nbsp;».
 
 Document d'origine : Vitalik Buterin - [Sharding FAQ](https://github.com/ethereum/wiki/wiki/Sharding-FAQ)
 
