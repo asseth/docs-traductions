@@ -459,8 +459,8 @@ jusqu'à ½ dans l'hypothèse de la majorité non coordonnée.
 [Shellingcoin](https://blog.ethereum.org/2014/03/28/schellingcoin-a-minimal-trust-universal-data-feed/)
 reste robuste jusqu'à ½ dans les hypothèses de la majorité honnête et de la
 majorité non coordonnée, a un coût d'attaque de ε (c'est-à-dire légèrement
-supérieur à zéro) dans un modèle de choix coordonné, et demande un budget de P
-+ ε et un coût de ε dans un modèle d'attaquant corrupteur en raison des
+supérieur à zéro) dans un modèle de choix coordonné, et demande un budget de 
+P + ε et un coût de ε dans un modèle d'attaquant corrupteur en raison des
 [attaques P + epsilon](https://blog.ethereum.org/2015/01/28/p-epsilon-attack/).
 
 Il existe aussi des modèles hybrides&nbsp;; par exemple, même dans les modèles
