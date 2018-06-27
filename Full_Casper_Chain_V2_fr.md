@@ -8,11 +8,11 @@ Ceci est le document de travail décrivant la spécification du la chaîne Caspe
 
 <!--There is a central PoS chain which stores and manages the current set of active PoS validators. The only mechanism available to become a validator initially is to send a transaction on the existing PoW main chain containing 32 ETH. When you do so, as soon as the PoS chain processes that block, you will be queued, and eventually inducted as an active validator until you either  voluntarily log out or you are forcibly logged out as a penalty for misbehavior.-->
 
-Il existe une chaîne centrale en PoS qui stocke et gère l'ensemble courant des validateurs PoS actifs. Le seul mécanisme dispobible pour devenir un validateur initialement consiste à envoyer une transaction de 32 ETH sur la chaîne principale en PoW. Ceci fait, dès que la chaîne en PoS traite ce bloc, on est mis en file d'attente et finalement accepté comme validateur actif jusqu'ầ un retrait volontaire ou forcé dans le cas d'une pénalité pour inconduite.
+Il existe une chaîne centrale en PoS qui stocke et gère l'ensemble courant des validateurs PoS actifs. Le seul mécanisme disponible pour devenir un validateur initialement consiste à envoyer une transaction de 32 ETH sur la chaîne principale en PoW. Ceci fait, dès que la chaîne en PoS traite ce bloc, on est mis en file d'attente et finalement accepté comme validateur actif jusqu'ầ un retrait volontaire ou forcé dans le cas d'une pénalité pour inconduite.
 
 <!--The primary source of load on the PoS chain is **cross-links**. A cross-link is a special type of transaction that says "here is the hash of some recent block on shard X. Here are signatures from at least 2/3 of some randomly selected sample of M validators (eg. M = 1024) that attest to the validity of the cross-link". Every shard (eg. there might be 4000 shards total) is itself a PoS chain, and the shard chains are where the transactions and accounts will be stored. The cross-links serve to "confirm" segments of the shard chains into the main chain, and are also the primary way through which the different shards will be able to talk to each other.-->
 
-La principale source de charge sur la chaîne en PoS vient des **liaisons transversales** (_cross-links_). Une référence transversale est un type de transaction qui dit «&nbsp;Voici le _hash_, l'empreinte, d'un bloc récent sur le fragment X. Voici les signatures d'au moins 2/3 d'un échantillon sélectionné aléatoirement de M validateurs (p.ex. M = 1024) qui attestent la validité de la liaison transversale.&nbsp;» Chaque fragemnt est lui-même une chaîne en PoS et les chaînes fragments sont le lieu de stockage des transactions et des comptes. Les références transversales servent à «&nbsp;confirmer&nbsp;» des segments des chaînes fragments dans la chaîne principale et sont également le moyen principal par leque les fragments peuvent communiquer entre eux.
+La principale source de charge sur la chaîne en PoS vient des **liaisons transversales** (_cross-links_). Une référence transversale est un type de transaction qui dit «&nbsp;Voici le _hash_, l'empreinte, d'un bloc récent sur le fragment X. Voici les signatures d'au moins 2/3 d'un échantillon sélectionné aléatoirement de M validateurs (p.ex. M = 1024) qui attestent la validité de la liaison transversale.&nbsp;» Chaque fragment est lui-même une chaîne en PoS et les chaînes fragments sont le lieu de stockage des transactions et des comptes. Les références transversales servent à «&nbsp;confirmer&nbsp;» des segments des chaînes fragments dans la chaîne principale et sont également le moyen principal par lequel les fragments peuvent communiquer entre eux.
 
 <!--Note: the python code at https://github.com/ethereum/beacon_chain does not reflect all of the latest changes. If there is a discrepancy, this document is likely to reflect the more recent changes.-->
 
@@ -239,7 +239,7 @@ La racine de l'état est égale à la concaténation de `blake(serialize(crystal
 
 <!--Processing the beacon chain is fundamentally similar to processing a PoW chain in many respects. Clients download and process blocks, and maintain a view of what is the current "canonical chain", terminating at the current "head". However, because of the beacon chain's relationship with the existing PoW chain, and because it is a PoS chain, there are differences.-->
 
-Les traitements sur la chaîne phare est fondamentalement similaire aux traitements sur une chaîne en PoW par bien des aspects. Les clients téléchargent et traitent les blocs, et maintiennent une vue de la «&nbsp;chaîne canonique&nbsp;» courante, se terminant à la «&nbsp;tête&nbsp;» courante. Cependant, en raison des relations de la chaîne phare avec la chaîne en PoW existante et de sa nature de chaîne en PoS, il existe des différences.
+Les traitements sur la chaîne phare sont fondamentalement similaires aux traitements sur une chaîne en PoW par bien des aspects. Les clients téléchargent et traitent les blocs, et maintiennent une vue de la «&nbsp;chaîne canonique&nbsp;» courante, se terminant à la «&nbsp;tête&nbsp;» courante. Cependant, en raison des relations de la chaîne phare avec la chaîne en PoW existante et de sa nature de chaîne en PoS, il existe des différences.
 
 <!--For a block on the beacon chain to be processed by a node, three conditions have to be met:-->
 
@@ -263,7 +263,7 @@ La production de blocs diffère significativement en raison du mécanisme de pre
 
 <!--When a client changes its view of the head, they should also compute the list of attesters (a set of validators that need to sign off on the head; see below for details), and immediately publish an attestation for that block, signing the serialized form of the parent block with their key.-->
 
-Quand un lient change sa vue de la tête, il doit aussi calculer la liste des attestataires (un ensemble de validateurs qui doit approuver sur la tête&nbsp;; voir ci-dessous pour les détails) et immédiatement publier une attestation pour ce bloc en signant la forme sérialisée du bloc parent avec leur clef.
+Quand un client change sa vue de la tête, il doit aussi calculer la liste des attestataires (un ensemble de validateurs qui doit approuver sur la tête&nbsp;; voir ci-dessous pour les détails) et immédiatement publier une attestation pour ce bloc en signant la forme sérialisée du bloc parent avec leur clef.
 
 ### Beacon chain fork choice rule
 
@@ -280,7 +280,7 @@ Tant qu'elle est implémentée comme _tag-along_ de la chaîne en PoW, la règle
 
 <!--Because of an additional validity condition that requires the `main_chain_ref` of a beacon block to be equal to or a descendant of that of its parent, this implies that the `main_chain_ref` of _every_ block in this beacon chain is inside the highest-scoring main chain). This ensures that the beacon chain follows along the actual canonical main PoW chain.-->
 
-En raison d'une condition de validité supplémentaire qui impose que la `main_chain_ref` d'un bloc phare soit égal à ou un descendant de celle de son parent, cela implique que la `main_chain_ref` de chaque bloc dans cette chaîne phare soit à l'intérieur de la chaîne principale de plus haut score. Cela garantit que la chaîne phare suit la chaîne principale en PoW réellement canonique.
+En raison d'une condition de validité supplémentaire qui impose que la `main_chain_ref` d'un bloc phare soit égale à ou un descendant de celle de son parent, cela implique que la `main_chain_ref` de chaque bloc dans cette chaîne phare soit à l'intérieur de la chaîne principale de plus haut score. Cela garantit que la chaîne phare suit la chaîne principale en PoW réellement canonique.
 
 <!--This can be "updated online" using the following algorithms. First, it's important to keep track of not just the head of the main and beacon chains, but also the block at every height. This can be maintained by the following algorithm, to be run at every change of the head:-->
 
@@ -349,13 +349,13 @@ Nous définissons maintenant la fonction de transition d'état. Au plus haut niv
 
 <!--The epoch transition generally focuses on changes to the validator set, including adjusting balances and adding and removing validators, as well as processing cross-links and setting up FFG checkpoints, and the per-block processing generally focuses on saving temporary records relating to the in-block activity in the active state.-->
 
-La transition d'époque est généralement centrée sur les changements de l'ensemble des validateurs, y compris l'ajustement des soldes et l'ajout et le retrait des validateurs, ainsi que le traitement des liaisons transversales et la mise en place des points de contrôle FFG, et le traitement par bloc est généralement centrée sur la sauvegarde des enregistrements temporaires liés à l'activité propre aux blocs dans l'état actif.
+La transition d'époque est généralement centrée sur les changements de l'ensemble des validateurs, y compris l'ajustement des soldes et l'ajout et le retrait des validateurs, ainsi que le traitement des liaisons transversales et la mise en place des points de contrôle FFG, et le traitement par bloc est généralement centré sur la sauvegarde des enregistrements temporaires liés à l'activité propre aux blocs dans l'état actif.
 
 ### Fonctions helper
 
 <!--We start off by defining some helper algorithms. First, an algorithm for pseudorandomly shuffling the validator set based on some seed:-->
 
-Nous commençons par définir des algoruthmes helper. D'abord, un algorithme pour mélanger pseudo-aléatoirement l'ensemble des validateurs en fonction d'une _seed_ donnée&nbsp;:
+Nous commençons par définir des algorithmes helper. D'abord, un algorithme pour mélanger pseudo-aléatoirement l'ensemble des validateurs en fonction d'une _seed_ donnée&nbsp;:
 
 ```python
 def get_shuffling(seed, validator_count):
@@ -390,7 +390,7 @@ def get_attesters_and_proposer(crystallized_state, active_state, skip_count):
 
 <!--For shard crosslinks, the process is somewhat more complicated. First, we choose the set of shards active during each epoch. We want to target some fixed number of notaries per crosslink, but this means that since there is a fixed number of shards and a variable number of validators, we won't be able to go through every shard in every epoch. Hence, we first need to select which shards we will be crosslinking in some given epoch:-->
 
-Pour les liaisons transversales entre fragments, le processus est un peu plus compliqué. D'abord nous choisissons l'ensemble des fragments actifs pendant chaque époque. Nous voulons cibler un nombre fixe de notaires par liaison transversale mais cela signifie que, puisqu'il y a un nombre fixe de fragments et un nombre variable de validateurs, nous ne pouvons pas passer par chaque fragment à chaque époque. Nous devons donc d'abord sélectinner les fragments qui feront l'objet d'une liaison transversale à une époque donnée&nbsp;:
+Pour les liaisons transversales entre fragments, le processus est un peu plus compliqué. D'abord nous choisissons l'ensemble des fragments actifs pendant chaque époque. Nous voulons cibler un nombre fixe de notaires par liaison transversale mais cela signifie que, puisqu'il y a un nombre fixe de fragments et un nombre variable de validateurs, nous ne pouvons pas passer par chaque fragment à chaque époque. Nous devons donc d'abord sélectionner les fragments qui feront l'objet d'une liaison transversale à une époque donnée&nbsp;:
 
 ```python
 def get_crosslink_shards(crystallized_state):
@@ -419,7 +419,7 @@ def get_crosslink_notaries(crystallized_state, shard_id):
 
 <!--The `current_shuffling` is recalculated at the start of a dynasty transition.-->
 
-Le `current_shuffling` est recakculé au départ d'une transition de dynastie.
+Le `current_shuffling` est recalculé au départ d'une transition de dynastie.
 
 ### Traitement par bloc
 
@@ -511,7 +511,7 @@ Répéter pour chaque fragment&nbsp;:
 * If any crosslink reaches >=2/3 of its sample, weighted by total deposits (not including any balance deltas that are part of this epoch transition), save it as the most recent crosslink-->
 
 * Calculer les `online_reward` et `offline_penalty` pour cette référence transversale&nbsp;;
-* Prendre la référence transversale partielle avec le plus de vote (en cassant les liaisons par ordre d'empreinte de point de contrôle). Récompenser tous les validateurs qui ont participé à cette liaison transversale partielle&nbsp;; pénaliser les autres.
+* Prendre la référence transversale partielle avec le plus de vote (en cassant les liaisons par ordre d'empreinte de point de contrôle). Récompenser tous les validateurs qui ont participés à cette liaison transversale partielle&nbsp;; pénaliser les autres.
 * Si une liaison transversale atteint ≥ 2/3 de son échantillon, redressé par les dépôts totaux (en excluant les deltas de solde qui font partie de cette transition d'époque), on le sauvegarde comme la liaison transversale la plus récente.
 
 ### Traiter les deltas de soldes
@@ -550,8 +550,8 @@ Alors&nbsp;:
 * Go through all `active_valdidators`, and move any with either (i) balance equal to <= 50% of their initial balance, or (ii) `switch_dynasty` equal to or less than the new current dynasty, to `exited_validators`, moving up to a maximum of `(len(crystallized_state.active_validators) // 30) + 1` validators-->
 
 * Incrémenter `crystallized_state.dynasty`&nbsp;;
-* Passer par tous les `queued_validators` dans l'ordre du premier au dernier. Tout validateur dont `switch_dynasty` est égal où antérieur à la nouvelle dynastie est immédiatement ajouté à la fin de `active_validators` (en mettant `switch_dynasty` à l'entier le plus élevé possible) jusqu'à un maximum de `(len(crystallized_state.active_validators) // 30) + 1` (remarquez que comme `queued_validators` est trié, il suffit soit de vérifier les validateurs en file d'attente au départ jusqu'à ce que vous en ayez traité suffisamment, soit d'en atteindre un dont le `switch_dynasty` soit plus avancé que la dynastie courante)&nbsp;;
-* Passer par tous les  `active_valdidators` et déplacer ceux dont (i) le solde est égal à ≤ 50% de leur solde initial, ou (ii) `switch_dynasty` est égal ou inférieur à la dynastie courante, vers `exited_validators`, en montant à un maximum de `(len(crystallized_state.active_validators) // 30) + 1` validateurs.
+* Passer par tous les `queued_validators` dans l'ordre du premier au dernier. Tout validateur dont `switch_dynasty` est égal ou antérieur à la nouvelle dynastie est immédiatement ajouté à la fin de `active_validators` (en mettant `switch_dynasty` à l'entier le plus élevé possible) jusqu'à un maximum de `(len(crystallized_state.active_validators) // 30) + 1` (remarquez que comme `queued_validators` est trié, il suffit soit de vérifier les validateurs en file d'attente au départ jusqu'à ce que vous en ayez traité suffisamment, soit d'en atteindre un dont le `switch_dynasty` soit plus avancé que la dynastie courante)&nbsp;;
+* Passer par tous les  `active_validators` et déplacer ceux dont (i) le solde est égal à ≤ 50% de leur solde initial, ou (ii) `switch_dynasty` est égal ou inférieur à la dynastie courante, vers `exited_validators`, en montant à un maximum de `(len(crystallized_state.active_validators) // 30) + 1` validateurs.
 
 ### Divers
 
@@ -653,7 +653,7 @@ Un ValidatorRecord contient&nbsp;:
 
 <!--That's 102 bytes in total. We'll assume that the queued and exited sets are empty for simplicity and focus on the active set.-->
 
-Ce qui fait 102 octets au total. Nous supposerons que les ensemble en file d'attente et en instance de sortie sont vides dans un but de simplicité et nous nous concentrons sur l'ensemble actif.
+Ce qui fait 102 octets au total. Nous supposerons que les ensembles en file d'attente et en instance de sortie sont vides dans un but de simplicité et nous nous concentrons sur l'ensemble actif.
 
 <!--A CrosslinkRecord is just:-->
 
