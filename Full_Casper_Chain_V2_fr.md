@@ -1,5 +1,7 @@
 # Chaîne Casper complète v2
 
+_Traduction de Full Casper chain v2 par Vitalik Buterin (https://notes.ethereum.org/SCIg8AH5SA-O4C1G1LYZHQ?both#)_
+
 <!--This is the work-in-progress document describing the specification for the Casper+Sharding chain, version 2. Unlike the earlier version, which heavily relied on the existing Ethereum PoW chain as a central chain, this spec uses as its base a full proof of stake chain based on a RANDAO beacon, attestations and the Casper FFG mechanism, with a relatively simple tie to the main PoW chain, including block referencing and one-way deposits.-->
 
 Ci-après le document de travail décrivant la spécification de la chaîne Casper+Sharding, version 2. Contrairement à la version antérieure, essentiellement fondée sur la chaîne Ethereum en preuve de travail en tant que chaîne centrale, cette spécification emploie comme base une chaîne complètement preuve d'enjeu fondée sur un phare (_beacon_) RANDAO, des attestations et le mécanisme de Casper FFG, avec un lien relativement simple vers la chaîne en PoW intégrant le référencement de blocs et des dépôts à sens unique.
@@ -510,9 +512,9 @@ Répéter pour chaque fragment&nbsp;:
 * Take the partial crosslink with the most votes (breaking ties by order of checkpoint hash). Reward any validator that participated in that partial crosslink; penalize any validator that did not.
 * If any crosslink reaches >=2/3 of its sample, weighted by total deposits (not including any balance deltas that are part of this epoch transition), save it as the most recent crosslink-->
 
-* Calculer les `online_reward` et `offline_penalty` pour cette référence transversale&nbsp;;
-* Prendre la référence transversale partielle avec le plus de vote (en cassant les liaisons par ordre d'empreinte de point de contrôle). Récompenser tous les validateurs qui ont participés à cette liaison transversale partielle&nbsp;; pénaliser les autres.
-* Si une liaison transversale atteint ≥ 2/3 de son échantillon, redressé par les dépôts totaux (en excluant les deltas de solde qui font partie de cette transition d'époque), on le sauvegarde comme la liaison transversale la plus récente.
+* Calculer les `online_reward` et `offline_penalty` pour cette liaison transversale&nbsp;;
+* Prendre la liaison transversale partielle avec le plus de vote (en classant les liaisons par ordre d'empreinte de point de contrôle). Récompenser tous les validateurs qui ont participé à cette liaison transversale partielle&nbsp;; pénaliser les autres.
+* Si une liaison transversale atteint ≥ 2/3 de son échantillon, pondéré par les dépôts totaux (en excluant les deltas de solde qui font partie de cette transition d'époque), on la sauvegarde comme la liaison transversale la plus récente.
 
 ### Traiter les deltas de soldes
 
@@ -607,7 +609,7 @@ Les liaisons transversales ajoutent&nbsp;:
 
 <!--Each crosslink is thus 162 bytes, and the fixed data is 42848 bytes. Per validator, we get 1/8 bytes in the FFG bitfield, and 162/1024 ~= 0.158 bytes per validator in the partial crosslink,a  total of ~0.283 bytes per validator. Hence, we get as the total active state size:-->
 
-Chaque liaison transversale fait donc 162 octets et les données fixes 42848 octets. Par validateurs, nous avons 1/8 d'octet dans le champ de bits FFG et 162/1824 ~= 0.158 octets par validateur dans la liaison transversale partielle, un total de ~0.283 octet par validateur. Nous obtenons donc pour la taille totale de l'état actif&nbsp;:
+Chaque liaison transversale fait donc 162 octets et les données fixes 42848 octets. Par validateur, nous avons 1/8 d'octet dans le champ de bits FFG et 162/1824 ~= 0.158 octets par validateur dans la liaison transversale partielle, un total de ~0.283 octet par validateur. Nous obtenons donc pour la taille totale de l'état actif&nbsp;:
 
 * 1M ETH: 42848 + 31250 * 0.283 = 51692 octets
 * 10M ETH: 42848 + 312500 * 0.283 = 131286 octets
@@ -727,8 +729,8 @@ Le traitement des blocs demande&nbsp;:
 
 * Le re-hachage de l'état actif&nbsp;;
 * Le re-hachage de l'état cristallisé (uniquement lors d'une transition d'époque)&nbsp;;
-* La vérification d'une signature BLS pour le bloc, plus une pour les attestations, plus une pour chaque enregistrement de liaison transversale. Au meilleur des cas 5 par bloc, au pire 41 par bloc&nbsp;;
-* 2 opérations ECADD par époque (c.à.d. 0.02 par bloc) par validateur pour la vérification des signatures agrégées, plus un nombre fixe de ~128 opérations ECADD par bloc. Au meilleur des cas ~753 (équivalent à <1 signature ECDSA), en moyenne <!--général--> ~6378 (~5-10 signatures ECDSA), au pire ~80128 (~50-100 signatures ECDSA)&nbsp;;
+* La vérification d'une signature BLS pour le bloc, plus une pour les attestations, plus une pour chaque enregistrement de liaison transversale. Dans le cas le plus favorable, 5 par bloc, dans le plus défavorable, 41 par bloc&nbsp;;
+* 2 opérations ECADD par époque (c.à.d. 0.02 par bloc) par validateur pour la vérification des signatures agrégées, plus un nombre fixe de ~128 opérations ECADD par bloc. Dans le cas le plus favorable, ~753 (équivalent à <1 signature ECDSA), en moyenne <!--général--> ~6378 (~5-10 signatures ECDSA), dans le cas le plus défavorable, ~80128 (~50-100 signatures ECDSA)&nbsp;;
 * Beaucoup d'opérations relativement peu coûteuses impliquant de boucler sur les validateurs, filtrer sur les champs de bits, etc. etc.
 
 -------
