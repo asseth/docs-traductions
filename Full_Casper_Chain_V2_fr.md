@@ -4,13 +4,13 @@ _Traduction de Full Casper chain v2 par Vitalik Buterin (https://notes.ethereum.
 
 <!--This is the work-in-progress document describing the specification for the Casper+Sharding chain, version 2. Unlike the earlier version, which heavily relied on the existing Ethereum PoW chain as a central chain, this spec uses as its base a full proof of stake chain based on a RANDAO beacon, attestations and the Casper FFG mechanism, with a relatively simple tie to the main PoW chain, including block referencing and one-way deposits.-->
 
-Ci-après le document de travail décrivant la spécification de la chaîne Casper+Sharding, version 2. Contrairement à la version antérieure, essentiellement fondée sur la chaîne Ethereum en preuve de travail en tant que chaîne centrale, cette spécification emploie comme base une chaîne complètement preuve d'enjeu fondée sur un phare (_beacon_) RANDAO, des attestations et le mécanisme de Casper FFG, avec un lien relativement simple vers la chaîne en PoW intégrant le référencement de blocs et des dépôts à sens unique.
+Ci-après le document de travail décrivant la spécification de la chaîne Casper+Sharding, version 2. Contrairement à la version antérieure, essentiellement fondée sur la chaîne Ethereum en preuve de travail en tant que chaîne centrale, cette spécification emploie comme base une chaîne complètement en preuve d'enjeu fondée sur un phare (_beacon_) RANDAO, des attestations et le mécanisme de Casper FFG, avec un lien relativement simple vers la chaîne principale en PoW, comprenant le référencement de blocs et des dépôts à sens unique.
 
 ### Description générale de la structure
 
 <!--There is a central PoS chain which stores and manages the current set of active PoS validators. The only mechanism available to become a validator initially is to send a transaction on the existing PoW main chain containing 32 ETH. When you do so, as soon as the PoS chain processes that block, you will be queued, and eventually inducted as an active validator until you either  voluntarily log out or you are forcibly logged out as a penalty for misbehavior.-->
 
-Il existe une chaîne centrale en PoS qui stocke et gère l'ensemble courant des validateurs PoS actifs. Le seul mécanisme disponible pour devenir un validateur initialement consiste à envoyer une transaction de 32 ETH sur la chaîne principale en PoW. Ceci fait, dès que la chaîne en PoS traite ce bloc, on est mis en file d'attente et finalement accepté comme validateur actif jusqu'ầ un retrait volontaire ou forcé dans le cas d'une pénalité pour inconduite.
+Il existe une chaîne centrale en PoS qui stocke et gère l'ensemble à jour des validateurs PoS actifs. Le seul mécanisme disponible pour devenir un validateur pour la première fois consiste à envoyer une transaction de 32 ETH sur la chaîne principale en PoW. Ceci fait, dès que la chaîne en PoS traite ce bloc, on est mis en file d'attente et finalement accepté comme validateur actif jusqu'ầ un retrait volontaire ou forcé dans le cas d'une pénalité pour mauvaise conduite.
 
 <!--The primary source of load on the PoS chain is **cross-links**. A cross-link is a special type of transaction that says "here is the hash of some recent block on shard X. Here are signatures from at least 2/3 of some randomly selected sample of M validators (eg. M = 1024) that attest to the validity of the cross-link". Every shard (eg. there might be 4000 shards total) is itself a PoS chain, and the shard chains are where the transactions and accounts will be stored. The cross-links serve to "confirm" segments of the shard chains into the main chain, and are also the primary way through which the different shards will be able to talk to each other.-->
 
@@ -62,25 +62,25 @@ Cette proposition de PoS/Sharding peut être implémentée séparément de la ch
 * Main chain clients will implement a method, `prioritize(block_hash, value)`. If the block is available and has been verified, this method sets its score to the given value, and recursively adjusts the scores of all descendants. This allows the PoS beacon chain's finality gadget to also implicitly finalize main chain blocks.-->
 
 * Sur la chaîne principale un contrat est ajouté&nbsp;; ce contrat vous permet de déposer 32 ETH&nbsp;; la fonction `deposit` prend en arguments (i) `pubkey`, (ii) `withdrawal_shard_id` (int), (iii)  `withdrawal_addr` (address) et (iv) `randao_commitment` (bytes32)
-* Les clients de la chaîne principale implémenteront une méthode, `prioritize(block_hash, value)`. Si le bloc est disponible et a été vérifié, cette méthode donne la valeur à son score et ajuste récursivement les scores de tous les descendants. Cela permet également au gadget de finalité de la chaîne phare en PoS de finaliser implicitement les blocs de la chaîne principale.
+* Les clients de la chaîne principale implémenteront une méthode, `prioritize(block_hash, value)`. Si le bloc est disponible et a été vérifié, cette méthode donne la valeur à son score et ajuste récursivement les scores de tous les descendants. Cela permet également au _finality gadget_ (gadget de finalité) de la chaîne phare en PoS de finaliser implicitement les blocs de la chaîne principale.
 
 ### Chaîne phare
 
 <!--The beacon chain is the "main chain" of the PoS system. The beacon chain's main responsibilities are:-->
 
-La chaîne phare est la «&nbsp;chaîne principale&nbsp;» du système de PoS. Les principales responsabilités de la chaîne phare sont&nbsp;:
+La chaîne phare est la «&nbsp;chaîne principale&nbsp;» du système de PoS. Les principales fonctions de la chaîne phare sont&nbsp;:
 
 <!--* Store and maintain the set of active, queued and exited validators
 * Process cross-links (see above) 
 * Process its own block-by-block consensus, as well as the FFG finality gadget -->
 
-* Stocker et maintenir l'ensemble des validateurs actifs, en file d'attente et partis&nbsp;;
+* Stocker et maintenir l'ensemble des validateurs actifs, en file d'attente et sortis&nbsp;;
 * Traiter les liaisons transversales (voir plus haut)&nbsp;;
 * Traiter son propre consensus bloc par bloc ainsi que le gadget de finalité de FFG.
 
 <!--Here are the fields that go into every beacon chain block:-->
 
-Voici les champs allant dans chaque bloc de chaîne phare&nbsp;:
+Voici les champs de chaque bloc de la chaîne phare&nbsp;:
 
 ```python
 fields = {
@@ -90,7 +90,7 @@ fields = {
     'skip_count': 'int64',
     # Révélation de l'engagement de Randao
     'randao_reveal': 'hash32',
-    # Champ de bits de ceux du comité d'attestation qui ont participé
+    # Membres du comité d'attestation qui ont participé (en champ de bits)
     'attestation_bitfield': 'bytes',
     # Leur signature agrégée
     'attestation_aggregate_sig': ['int256'],
@@ -115,11 +115,11 @@ fields = {
     'height': 'int64',
     # État du phare RANDAO global
     'randao': 'hash32',
-    # Quels validateurs ont effectué un vote FFG pendant cette époque (en champ de bits)
+    # Validateurs ayant effectué un vote FFG pendant cette époque (en champ de bits)
     'ffg_voter_bitfield': 'bytes',
     # Attestataires du bloc à la dernière époque
     'recent_attesters': ['int24'],
-    # Stocage de données sur les liaisons transversales en cours pendant cette époque
+    # Stockage de données sur les liaisons transversales en cours pendant cette époque
     'partial_crosslinks': [PartialCrosslinkRecord],
     # Nombre total de sauts (utilisé pour déterminer l'horodatage minimal)
     'total_skip_count': 'int64',
@@ -149,7 +149,7 @@ Chaque `RecentProposerRecord` est un objet contenant des informations sur les pr
 
 ```python
 fields = {
-    # CIndex des proposants
+    # Index des proposants
     'index': 'int24',
     # Nouvel engagement RANDAO
     'randao_commitment': 'hash32',
@@ -170,26 +170,26 @@ fields = {
     'queued_validators': [ValidatorRecord],
     # Liste des validateurs supprimés  en attendant un retrait
     'exited_validators': [ValidatorRecord],
-    # La permutation des validateurs utilisée pour déterminer l'origine 
+    # Permutation des validateurs utilisée pour déterminer l'origine 
     # des liaisons transversales vers des fragments à cette époque
     'current_shuffling': ['int24'],
-    # L'époque courante
+    # Epoque courante
     'current_epoch': 'int64',
-    # La dernière époque justifiée
+    # Dernière époque justifiée
     'last_justified_epoch': 'int64',
-    # La dernière époque finalisée
+    # Dernière époque finalisée
     'last_finalized_epoch': 'int64',
-    # La dynastie courante
+    # Dynastie courante
     'dynasty': 'int64',
-    # Le fragment suivant d'où partira cette affectation de liaison transversale
+    # Prochain fragment d'où partira cette affectation de liaison transversale
     'next_shard': 'int16',
-    # Le point de contrôle FFG courant
+    # Point de contrôle FFG courant
     'current_checkpoint': 'hash32',
     # Enregistrements sur la liaison transversale la plus récente pour chaque fragment
     'crosslink_records': [CrosslinkRecord],
     # Solde total des dépôts
     'total_deposits': 'int256',
-    # Utilisé pour sélectionné les comités pour chaque fragment
+    # Utilisé pour sélectionner les comités pour chaque fragment
     'crosslink_seed': 'hash32',
     # Dernière époque à laquelle la _seed_ de liaison transversale a été réinitialisée
     'crosslink_seed_last_reset': 'int64'
@@ -202,14 +202,14 @@ Chaque `ValidatorRecord` est un objet contenant des informations sur un validate
 
 ```python
 fields = {
-    # La clef publique du validateur
+    # Clef publique du validateur
     'pubkey': 'int256',
-    # Le fragment auquel le solde du validateur sera envoyé
+    # Fragment auquel le solde du validateur sera envoyé
     # après le retrait
     'withdrawal_shard': 'int16',
-    # Et l'adresse
+    # Adresse
     'withdrawal_address': 'address',
-    # La mise en gage du validateur au phare RANDAO courant
+    # Mise en gage du validateur au phare RANDAO courant
     'randao_commitment': 'hash32',
     # Solde courant
     'balance': 'int64',
@@ -227,7 +227,7 @@ Et un `CrosslinkRecord` contient des informations sur la dernière liaison trans
 fields = {
     # À quelle époque le liaison transversale a été soumise
     'epoch': 'int64',
-    # L'empreinte du bloc
+    # Empreinte du bloc
     'hash': 'hash32'
 }
 ```
@@ -267,7 +267,9 @@ La production de blocs diffère significativement en raison du mécanisme de pre
 
 Quand un client change sa vue de la tête, il doit aussi calculer la liste des attestataires (un ensemble de validateurs qui doit approuver sur la tête&nbsp;; voir ci-dessous pour les détails) et immédiatement publier une attestation pour ce bloc en signant la forme sérialisée du bloc parent avec leur clef.
 
-### Beacon chain fork choice rule
+<!--### Beacon chain fork choice rule-->
+
+### Choix de branche sur la chaîne phare
 
 <!--When the beacon chain becomes a standalone PoS system, then the fork choice rule is a simple highest-scoring-block rule, where the score is the same as in Casper FFG:-->
 
@@ -307,7 +309,7 @@ def update_head(chain, old_head, new_head):
 
 <!--When receiving a new beacon chain block, change the head only if its score is an improvement over that of the head _and_ the new block's `main_chain_ref` is in the main chain:-->
 
-Quand on reçoit un nouveau bloc de chaîne phare, on ne change la tête que si sont score représente une amélioration par rapport à celui de la tête _et_ si la `main_chain_ref` du nouveau bloc se trouve dans la chaîne principale&nbsp;:
+Quand on reçoit un nouveau bloc de chaîne phare, on ne change la tête que si son score représente une amélioration par rapport à celui de la tête _et_ si la `main_chain_ref` du nouveau bloc se trouve dans la chaîne principale&nbsp;:
 
 ```python
 def should_I_change_head(main_chain, old_beacon_head, new_beacon_block):
